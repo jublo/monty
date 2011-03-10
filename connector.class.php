@@ -55,6 +55,13 @@ abstract class Monty_Connector {
 	public abstract function id();
 
 	/**
+	 * Monty_Connector::next()
+	 *
+	 * Walk through the result set.
+	 */
+	public abstract function next();
+
+	/**
 	 * Monty_Connector::open()
 	 *
 	 * Open a database connection.
@@ -81,13 +88,6 @@ abstract class Monty_Connector {
 	 * Seek a certain row in the result set.
 	 */
 	public abstract function seek($intRow);
-
-	/**
-	 * Monty_Connector::walk()
-	 *
-	 * Walk through the result set.
-	 */
-	public abstract function next();
 
 	/**
 	 * Monty_Connector::walksingle()

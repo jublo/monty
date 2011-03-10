@@ -77,6 +77,24 @@ class Monty_MySQL extends Monty_Connector
 	}
 
 	/**
+	 * Monty_MySQL::next()
+	 *
+	 * @param int $intType
+	 * @return mixed $mixRow
+	 */
+	public function next($intType = MONTY_NEXT_ARRAY) {
+		if (!$this->_strQuery) {
+			return false;
+		}
+		switch($intType) {
+			case MONTY_NEXT_ARRAY:
+				return mysql_fetch_assoc($this->_resQuery);
+			case MONTY_NEXT_OBJECT:
+				return mysql_fetch_object($this->_resQuery);
+		}
+	}
+
+	/**
 	 * Monty_MySQL::open()
 	 *
 	 * @param string $strUser
@@ -139,24 +157,6 @@ class Monty_MySQL extends Monty_Connector
 			return false;
 		}
 		return mysql_data_seek($intRow);
-	}
-
-	/**
-	 * Monty_MySQL::next()
-	 *
-	 * @param int $intType
-	 * @return mixed $mixRow
-	 */
-	public function next($intType = MONTY_NEXT_ARRAY) {
-		if (!$this->_strQuery) {
-			return false;
-		}
-		switch($intType) {
-			case MONTY_NEXT_ARRAY:
-				return mysql_fetch_assoc($this->_resQuery);
-			case MONTY_NEXT_OBJECT:
-				return mysql_fetch_object($this->_resQuery);
-		}
 	}
 
 	/**
