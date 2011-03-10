@@ -25,3 +25,4 @@ $strDirectory = dirname(__file__);
 require_once $strDirectory.'/monty.class.php';
 require_once $strDirectory.'/connector.class.php';
 require_once $strDirectory.'/connector.mysql.class.php';
+require_once $strDirectory.'/connector.mysql.easy.class.php';

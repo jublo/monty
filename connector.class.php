@@ -23,8 +23,14 @@ define('MONTY_ERROR_ARRAY', 2);
 define('MONTY_ERROR_OBJECT', 3);
 define('MONTY_ERROR_NUMERIC', 4);
 
+define('MONTY_JOIN_NORMAL', 1);
+define('MONTY_JOIN_LEFT', 2);
+define('MONTY_JOIN_RIGHT', 3);
+
 define('MONTY_NEXT_ARRAY', 1);
 define('MONTY_NEXT_OBJECT', 2);
+
+define('MONTY_QUERY_SELECT', 1);
 
 /**
  * Monty_Connector

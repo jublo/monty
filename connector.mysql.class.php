@@ -182,4 +182,15 @@ class Monty_MySQL extends Monty_Connector
 		}
 		return mysql_data_seek($intRow);
 	}
+
+	/**
+	 * Monty_MySQL::table()
+	 *
+	 * @param string $strTable
+	 * @param string $strShortcut
+	 * @return object Monty_MySQL_Easy
+	 */
+	public function table($strTable, $strShortcut = null) {
+		return new Monty_MySQL_Easy($strTable, $strShortcut);
+	}
 }
