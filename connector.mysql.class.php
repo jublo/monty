@@ -46,7 +46,7 @@ class Monty_MySQL extends Monty_Connector
 	 * @param int $intType
 	 * @return mixed $mixError
 	 */
-	public function error($intType)
+	public function error($intType = MONTY_ERROR_STRING)
 	{
 		switch ($intType) {
 			case MONTY_ERROR_STRING:
@@ -125,7 +125,7 @@ class Monty_MySQL extends Monty_Connector
 		if (!$this->_strQuery) {
 			return false;
 		}
-		return $this->_intRows();
+		return $this->_intRows;
 	}
 
 	/**

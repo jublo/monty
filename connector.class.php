@@ -45,54 +45,54 @@ abstract class Monty_Connector {
 	 *
 	 * Get the last operation error.
 	 */
-	public function error($intType = MONTY_ERROR_STRING);
+	public abstract function error($intType = MONTY_ERROR_STRING);
 
 	/**
 	 * Monty_Connector::id()
 	 *
 	 * Get the last inserted auto-id.
 	 */
-	public function id();
+	public abstract function id();
 
 	/**
 	 * Monty_Connector::open()
 	 *
 	 * Open a database connection.
 	 */
-	public function open($strHost = null, $strUser = null, $strPassword = null, $strDatabase = null);
+	public abstract function open($strUser, $strPassword, $strDatabase, $strHost = 'localhost');
 
 	/**
 	 * Monty_Connector::query()
 	 *
 	 * Run a raw database query.
 	 */
-	public function query($strQuery);
+	public abstract function query($strQuery);
 
 	/**
 	 * Monty_Connector::rows()
 	 *
 	 * Get the number of rows in the result set.
 	 */
-	public function rows();
+	public abstract function rows();
 
 	/**
 	 * Monty_Connector::seek()
 	 *
 	 * Seek a certain row in the result set.
 	 */
-	public function seek($intRow);
+	public abstract function seek($intRow);
 
 	/**
 	 * Monty_Connector::walk()
 	 *
 	 * Walk through the result set.
 	 */
-	public function next();
+	public abstract function next();
 
 	/**
 	 * Monty_Connector::walksingle()
 	 *
 	 * Walk through the result set and get the next field.
 	 */
-	public function nextfield();
+	public abstract function nextfield();
 }
