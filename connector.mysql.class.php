@@ -94,6 +94,30 @@ class Monty_MySQL extends Monty_Connector
 		}
 	}
 
+
+	/**
+	 * Monty_MySQL::nextfield()
+	 *
+	 * @param mixed $mixField
+	 * @return mixed $mixField
+	 */
+	public function nextfield($mixField = 0) {
+		if (!$this->_strQuery) {
+			return false;
+		}
+		if(is_int($mixField)) {
+			if(!$arrRow = mysql_fetch_row($this->_resQuery)) {
+				return false;
+			}
+			return isset($arrRow[$mixField]) ? $arrRow[$mixField] : false;
+		}
+		if(is_string($mixField)) {
+			if(!$arrRow = mysql_fetch_assoc($this->_resQuery)) {
+				return false;
+			}
+			return isset($arrRow[$mixField]) ? $arrRow[$mixField] : false;
+		}
+	}
 	/**
 	 * Monty_MySQL::open()
 	 *
@@ -157,29 +181,5 @@ class Monty_MySQL extends Monty_Connector
 			return false;
 		}
 		return mysql_data_seek($intRow);
-	}
-
-	/**
-	 * Monty_MySQL::nextfield()
-	 *
-	 * @param mixed $mixField
-	 * @return mixed $mixField
-	 */
-	public function nextfield($mixField = 0) {
-		if (!$this->_strQuery) {
-			return false;
-		}
-		if(is_int($mixField)) {
-			if(!$arrRow = mysql_fetch_row($this->_resQuery)) {
-				return false;
-			}
-			return isset($arrRow[$mixField]) ? $arrRow[$mixField] : false;
-		}
-		if(is_string($mixField)) {
-			if(!$arrRow = mysql_fetch_assoc($this->_resQuery)) {
-				return false;
-			}
-			return isset($arrRow[$mixField]) ? $arrRow[$mixField] : false;
-		}
 	}
 }
