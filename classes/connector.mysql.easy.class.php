@@ -36,6 +36,8 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	protected $_arrWheres;
 	protected $_boolDirty;
 	protected $_intInsertType;
+	protected $_intLimitCount;
+	protected $_intLimitStart;
 
 	/**
 	 * Monty_MySQL_Easy::__construct()
@@ -57,6 +59,8 @@ class Monty_MySQL_Easy extends Monty_MySQL
 		$this->_arrWheres = array();
 		$this->_boolDirty = true;
 		$this->_intInsertType = null;
+		$this->_intLimitCount = null;
+		$this->_intLimitStart = null;
 	}
 
 	/**
@@ -105,6 +109,25 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	{
 		$this->_boolDirty = true;
 		$this->_arrJoins[] = array($strTable, $intJoin);
+	}
+
+	/**
+	 * Monty_MySQL_Easy::limit()
+	 *
+	 * @param int $intStart
+	 * @param int $intCount
+	 * @return void
+	 */
+	public function limit()
+	{
+		$this->_boolDirty = true;
+		if (func_num_args() == 1) {
+			$this->_intLimitCount = func_get_arg(0);
+			$this->_intLimitStart = 0;
+		} elseif (func_num_args() == 2) {
+			$this->_intLimitCount = func_get_arg(1);
+			$this->_intLimitStart = func_get_arg(0);
+		}
 	}
 
 	/**
@@ -191,6 +214,19 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	}
 
 	/**
+	 * Monty_MySQL_Easy::update()
+	 *
+	 * @param array $arrFields
+	 * @return bool $boolHasSucceeded
+	 */
+	public function update($arrFields)
+	{
+		$this->_arrFields = $arrFields;
+		$this->_boolDirty = true;
+		return $this->_buildQuery(MONTY_QUERY_UPDATE);
+	}
+
+	/**
 	 * Monty_MySQL_Easy::where()
 	 *
 	 * @param string $strField
@@ -223,6 +259,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
 				$strQuery .= $this->_buildQueryJoins();
 				$strQuery .= $this->_buildQueryWheres();
 				$strQuery .= $this->_buildQuerySorts();
+				$strQuery .= $this->_buildQueryLimit();
 				break;
 
 			case MONTY_QUERY_INSERT:
@@ -240,7 +277,17 @@ class Monty_MySQL_Easy extends Monty_MySQL
 				$strQuery .= ' `' . $this->_arrTable[0] . '`';
 				$strQuery .= $this->_buildQueryFields();
 				break;
+
+			case MONTY_QUERY_UPDATE:
+				$strQuery = 'UPDATE';
+				$strQuery .= ' `' . $this->_arrTable[0] . '`';
+				$strQuery .= $this->_buildQueryFields();
+				$strQuery .= $this->_buildQueryWheres();
+				$strQuery .= $this->_buildQuerySorts();
+				$strQuery .= $this->_buildQueryLimit();
+				break;
 		}
+		die($strQuery);
 		$this->_boolDirty = false;
 		return $this->query($strQuery);
 	}
@@ -250,7 +297,8 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	 *
 	 * @return string $strFields
 	 */
- 	protected function _buildQueryFields() {
+	protected function _buildQueryFields()
+	{
 		$strFields = ' SET';
 		$i = 0;
 		foreach ($this->_arrFields as $strField => $strValue) {
@@ -275,14 +323,15 @@ class Monty_MySQL_Easy extends Monty_MySQL
 			$i++;
 		}
 		return $strFields;
- 	}
+	}
 
 	/**
 	 * Monty_MySQL_Easy::_buildQueryJoins()
 	 *
 	 * @return string $strJoins
 	 */
- 	protected function _buildQueryJoins() {
+	protected function _buildQueryJoins()
+	{
 		$strJoins = '';
 		foreach ($this->_arrJoins as $arrJoin) {
 			switch ($arrJoin[2]) {
@@ -299,14 +348,29 @@ class Monty_MySQL_Easy extends Monty_MySQL
 			$strJoins .= ' `' . $arrJoin[0] . '` ' . $arrJoin[1];
 		}
 		return $strJoins;
- 	}
+	}
+
+	/**
+	 * Monty_MySQL_Easy::_buildQueryLimit()
+	 *
+	 * @return string $strLimit
+	 */
+	protected function _buildQueryLimit()
+	{
+		$strLimit = '';
+		if($this->_intLimitStart !== null) {
+			$strLimit = ' LIMIT ' . $this->_intLimitStart . ', ' . $this->_intLimitCount;
+		}
+		return $strLimit;
+	}
 
 	/**
 	 * Monty_MySQL_Easy::_buildQuerySorts()
 	 *
 	 * @return string $strSorts
 	 */
- 	protected function _buildQuerySorts() {
+	protected function _buildQuerySorts()
+	{
 		$strSorts = '';
 		if (count($this->_arrSorts)) {
 			$strSorts .= ' ORDER BY';
@@ -337,14 +401,15 @@ class Monty_MySQL_Easy extends Monty_MySQL
 			}
 		}
 		return $strSorts;
- 	}
+	}
 
 	/**
 	 * Monty_MySQL_Easy::_buildQueryWheres()
 	 *
 	 * @return string $strWheres
 	 */
- 	protected function _buildQueryWheres() {
+	protected function _buildQueryWheres()
+	{
 		$strJoins = '';
 		if (count($this->_arrWheres)) {
 			$strJoins .= ' WHERE';
@@ -370,5 +435,5 @@ class Monty_MySQL_Easy extends Monty_MySQL
 			}
 		}
 		return $strJoins;
- 	}
+	}
 }

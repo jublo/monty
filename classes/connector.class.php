@@ -36,6 +36,7 @@ define('MONTY_NEXT_OBJECT', 2);
 
 define('MONTY_QUERY_SELECT', 1);
 define('MONTY_QUERY_INSERT', 2);
+define('MONTY_QUERY_UPDATE', 3);
 
 /**
  * Monty_Connector
