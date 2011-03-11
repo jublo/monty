@@ -220,71 +220,9 @@ class Monty_MySQL_Easy extends Monty_MySQL
 			case MONTY_QUERY_SELECT:
 				$strQuery = 'SELECT * FROM `' . $this->_arrTable[0] . '` ' . $this->
 					_arrTable[1];
-				foreach ($this->_arrJoins as $arrJoin) {
-					switch ($arrJoin[2]) {
-						case MONTY_JOIN_NORMAL:
-							$strQuery .= ' JOIN';
-							break;
-						case MONTY_JOIN_LEFT:
-							$strQuery .= ' LEFT JOIN';
-							break;
-						case MONTY_JOIN_RIGHT:
-							$strQuery .= ' RIGHT JOIN';
-							break;
-					}
-					$strQuery .= ' `' . $arrJoin[0] . '` ' . $arrJoin[1];
-				}
-				if (count($this->_arrWheres)) {
-					$strQuery .= ' WHERE';
-					for ($i = 0; $i < count($this->_arrWheres); $i++) {
-						$arrWhere = $this->_arrWheres[$i];
-						if (stristr($arrWhere[0], '.')) {
-							$arrField = explode('.', $arrWhere[0], 2);
-							$strField = $arrField[0] . '.`' . $arrField[1] . '`';
-						}
-						else {
-							$strField = '`' . $arrWhere[0] . '`';
-						}
-						$strQuery .= ' ' . $strField . ' ' . $arrWhere[1];
-						if (is_null($arrWhere[2])) {
-							$strQuery .= ' NULL';
-						}
-						else {
-							$strQuery .= ' "' . mysql_real_escape_string($arrWhere[2]) . '"';
-						}
-						if ($i + 1 < count($this->_arrWheres)) {
-							$strQuery .= ' AND';
-						}
-					}
-				}
-				if (count($this->_arrSorts)) {
-					$strQuery .= ' ORDER BY';
-					for ($i = 0; $i < count($this->_arrSorts); $i++) {
-						$arrSort = $this->_arrSorts[$i];
-						if ($arrSort[0] !== null) {
-							if (stristr($arrSort[0], '.')) {
-								$arrField = explode('.', $arrSort[0], 2);
-								$strField = $arrField[0] . '.`' . $arrField[1] . '`';
-							}
-							else {
-								$strField = '`' . $arrSort[0] . '`';
-							}
-							$strQuery .= ' ' . $strField;
-							if ($arrSort[1] < 0) {
-								$strQuery .= ' DESC';
-							}
-							else {
-								$strQuery .= ' ASC';
-							}
-						}
-						else {
-							$strQuery .= ' RAND()';
-						}
-						if ($i + 1 < count($this->_arrSorts)) {
-							$strQuery .= ',';
-						}
-					}
-				}
+				$strQuery .= $this->_buildQueryJoins();
+				$strQuery .= $this->_buildQueryWheres();
+				$strQuery .= $this->_buildQuerySorts();
 				break;
 
 			case MONTY_QUERY_INSERT:
@@ -299,32 +237,138 @@ class Monty_MySQL_Easy extends Monty_MySQL
 						$strQuery = 'REPLACE INTO';
 						break;
 				}
-				$strQuery .= ' `' . $this->_arrTable[0] . '` SET';
-				$i = 0;
-				foreach ($this->_arrFields as $strField => $strValue) {
-					$arrField = array($strField, $strValue);
-					if (stristr($arrField[0], '.')) {
-						$arrFieldName = explode('.', $arrField[0], 2);
-						$strField = '`' . $arrFieldName[1] . '`';
-					}
-					else {
-						$strField = '`' . $arrField[0] . '`';
-					}
-					$strQuery .= ' ' . $strField . ' =';
-					if (is_null($arrField[1])) {
-						$strQuery .= ' NULL';
-					}
-					else {
-						$strQuery .= ' "' . mysql_real_escape_string($arrField[1]) . '"';
-					}
-					if ($i + 1 < count($this->_arrFields)) {
-						$strQuery .= ',';
-					}
-					$i++;
-				}
+				$strQuery .= ' `' . $this->_arrTable[0] . '`';
+				$strQuery .= $this->_buildQueryFields();
 				break;
 		}
 		$this->_boolDirty = false;
 		return $this->query($strQuery);
 	}
+
+	/**
+	 * Monty_MySQL_Easy::_buildQueryFields()
+	 *
+	 * @return string $strFields
+	 */
+ 	protected function _buildQueryFields() {
+		$strFields = ' SET';
+		$i = 0;
+		foreach ($this->_arrFields as $strField => $strValue) {
+			$arrField = array($strField, $strValue);
+			if (stristr($arrField[0], '.')) {
+				$arrFieldName = explode('.', $arrField[0], 2);
+				$strField = '`' . $arrFieldName[1] . '`';
+			}
+			else {
+				$strField = '`' . $arrField[0] . '`';
+			}
+			$strFields .= ' ' . $strField . ' =';
+			if (is_null($arrField[1])) {
+				$strFields .= ' NULL';
+			}
+			else {
+				$strFields .= ' "' . mysql_real_escape_string($arrField[1]) . '"';
+			}
+			if ($i + 1 < count($this->_arrFields)) {
+				$strFields .= ',';
+			}
+			$i++;
+		}
+		return $strFields;
+ 	}
+
+	/**
+	 * Monty_MySQL_Easy::_buildQueryJoins()
+	 *
+	 * @return string $strJoins
+	 */
+ 	protected function _buildQueryJoins() {
+		$strJoins = '';
+		foreach ($this->_arrJoins as $arrJoin) {
+			switch ($arrJoin[2]) {
+				case MONTY_JOIN_NORMAL:
+					$strJoins .= ' JOIN';
+					break;
+				case MONTY_JOIN_LEFT:
+					$strJoins .= ' LEFT JOIN';
+					break;
+				case MONTY_JOIN_RIGHT:
+					$strJoins .= ' RIGHT JOIN';
+					break;
+			}
+			$strJoins .= ' `' . $arrJoin[0] . '` ' . $arrJoin[1];
+		}
+		return $strJoins;
+ 	}
+
+	/**
+	 * Monty_MySQL_Easy::_buildQuerySorts()
+	 *
+	 * @return string $strSorts
+	 */
+ 	protected function _buildQuerySorts() {
+		$strSorts = '';
+		if (count($this->_arrSorts)) {
+			$strSorts .= ' ORDER BY';
+			for ($i = 0; $i < count($this->_arrSorts); $i++) {
+				$arrSort = $this->_arrSorts[$i];
+				if ($arrSort[0] !== null) {
+					if (stristr($arrSort[0], '.')) {
+						$arrField = explode('.', $arrSort[0], 2);
+						$strField = $arrField[0] . '.`' . $arrField[1] . '`';
+					}
+					else {
+						$strField = '`' . $arrSort[0] . '`';
+					}
+					$strSorts .= ' ' . $strField;
+					if ($arrSort[1] < 0) {
+						$strSorts .= ' DESC';
+					}
+					else {
+						$strSorts .= ' ASC';
+					}
+				}
+				else {
+					$strSorts .= ' RAND()';
+				}
+				if ($i + 1 < count($this->_arrSorts)) {
+					$strSorts .= ',';
+				}
+			}
+		}
+		return $strSorts;
+ 	}
+
+	/**
+	 * Monty_MySQL_Easy::_buildQueryWheres()
+	 *
+	 * @return string $strWheres
+	 */
+ 	protected function _buildQueryWheres() {
+		$strJoins = '';
+		if (count($this->_arrWheres)) {
+			$strJoins .= ' WHERE';
+			for ($i = 0; $i < count($this->_arrWheres); $i++) {
+				$arrWhere = $this->_arrWheres[$i];
+				if (stristr($arrWhere[0], '.')) {
+					$arrField = explode('.', $arrWhere[0], 2);
+					$strField = $arrField[0] . '.`' . $arrField[1] . '`';
+				}
+				else {
+					$strField = '`' . $arrWhere[0] . '`';
+				}
+				$strJoins .= ' ' . $strField . ' ' . $arrWhere[1];
+				if (is_null($arrWhere[2])) {
+					$strJoins .= ' NULL';
+				}
+				else {
+					$strJoins .= ' "' . mysql_real_escape_string($arrWhere[2]) . '"';
+				}
+				if ($i + 1 < count($this->_arrWheres)) {
+					$strJoins .= ' AND';
+				}
+			}
+		}
+		return $strJoins;
+ 	}
 }
