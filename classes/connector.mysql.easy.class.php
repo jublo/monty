@@ -83,6 +83,18 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	}
 
 	/**
+	 * Monty_MySQL_Easy::all()
+	 *
+	 * @param int $intType
+	 * @return array $arrRows
+	 */
+	public function all($intType = MONTY_NEXT_ARRAY)
+	{
+		$this->_buildQuery();
+		return parent::all($intType);
+	}
+
+	/**
 	 * Monty_MySQL_Easy::insert()
 	 *
 	 * @param array $arrFields
@@ -287,7 +299,6 @@ class Monty_MySQL_Easy extends Monty_MySQL
 				$strQuery .= $this->_buildQueryLimit();
 				break;
 		}
-		die($strQuery);
 		$this->_boolDirty = false;
 		return $this->query($strQuery);
 	}

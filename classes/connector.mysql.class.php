@@ -41,6 +41,24 @@ class Monty_MySQL extends Monty_Connector
 	}
 
 	/**
+	 * Monty_MySQL::all()
+	 *
+	 * @param int $intType
+	 * @return array $arrRows
+	 */
+	public function all($intType = MONTY_ALL_ARRAY) {
+		if (!$this->_strQuery) {
+			return false;
+		}
+		$arrRows = array();
+		while($arrRow = $this->next($intType)) {
+			$arrRows[] = $arrRow;
+		}
+		return $arrRows;
+	}
+
+
+	/**
 	 * Monty_MySQL::error()
 	 *
 	 * @param int $intType
