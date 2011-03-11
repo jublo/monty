@@ -28,7 +28,9 @@
  */
 class Monty_MySQL_Easy extends Monty_MySQL
 {
+	protected static $_arrComparisons;
 	protected $_arrJoins;
+	protected $_arrSorts;
 	protected $_arrTable;
 	protected $_arrWheres;
 	protected $_boolDirty;
@@ -46,6 +48,8 @@ class Monty_MySQL_Easy extends Monty_MySQL
 		if (!$strShortcut) {
 			$strShortcut = substr($strTable, 0, 1);
 		}
+		self::$_arrComparisons = array('eq' => '=', 'gt' => '>', 'gte' => '>=', 'like' =>
+			'LIKE', 'lt' => '<', 'lte' => '<=', 'ne' => '!=', 'regexp' => 'REGEXP');
 		$this->_arrJoins = array();
 		$this->_arrTable = array($strTable, $strShortcut);
 		$this->_arrWheres = array();
@@ -53,39 +57,22 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	}
 
 	/**
-	 * Monty_MySQL_Easy::eq()
+	 * Monty_MySQL_Easy::__call()
 	 *
-	 * @param string $strField
-	 * @param string $strValue
-	 * @return void
+	 * @param string $strMethod
+	 * @param array $arrParams
+	 * @return mixed $mixReturn
 	 */
-	public function eq($strField, $strValue)
+	public function __call($strMethod, $arrParams)
 	{
-		$this->where($strField, '=', $strValue);
-	}
-
-	/**
-	 * Monty_MySQL_Easy::gt()
-	 *
-	 * @param string $strField
-	 * @param string $strValue
-	 * @return void
-	 */
-	public function gt($strField, $strValue)
-	{
-		$this->where($strField, '>', $strValue);
-	}
-
-	/**
-	 * Monty_MySQL_Easy::gte()
-	 *
-	 * @param string $strField
-	 * @param string $strValue
-	 * @return void
-	 */
-	public function gte($strField, $strValue)
-	{
-		$this->where($strField, '>=', $strValue);
+		if (substr($strMethod, 0, 1) == '_') {
+			trigger_error("$strMethod is not a public method.", E_USER_ERROR);
+			return;
+		}
+		if (in_array($strMethod, array_keys(self::$_arrComparisons))) {
+			return $this->where($arrParams[0], self::$_arrComparisons[$strMethod], $arrParams[1]);
+		}
+		trigger_error("$strMethod is not a method.", E_USER_ERROR);
 	}
 
 	/**
@@ -100,54 +87,6 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	{
 		$this->_boolDirty = true;
 		$this->_arrJoins[] = array($strTable, $intJoin);
-	}
-
-	/**
-	 * Monty_MySQL_Easy::like()
-	 *
-	 * @param string $strField
-	 * @param string $strValue
-	 * @return void
-	 */
-	public function like($strField, $strValue)
-	{
-		$this->where($strField, 'LIKE', $strValue);
-	}
-
-	/**
-	 * Monty_MySQL_Easy::lt()
-	 *
-	 * @param string $strField
-	 * @param string $strValue
-	 * @return void
-	 */
-	public function lt($strField, $strValue)
-	{
-		$this->where($strField, '<', $strValue);
-	}
-
-	/**
-	 * Monty_MySQL_Easy::lte()
-	 *
-	 * @param string $strField
-	 * @param string $strValue
-	 * @return void
-	 */
-	public function lte($strField, $strValue)
-	{
-		$this->where($strField, '<=', $strValue);
-	}
-
-	/**
-	 * Monty_MySQL_Easy::ne()
-	 *
-	 * @param string $strField
-	 * @param string $strValue
-	 * @return void
-	 */
-	public function ne($strField, $strValue)
-	{
-		$this->where($strField, '!=', $strValue);
 	}
 
 	/**
@@ -175,6 +114,17 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	}
 
 	/**
+	 * Monty_MySQL_Easy::rand()
+	 *
+	 * @return void
+	 */
+	public function rand()
+	{
+		$this->_boolDirty = true;
+		$this->_arrSorts = array(array(null, 1));
+	}
+
+	/**
 	 * Monty_MySQL_Easy::rows()
 	 *
 	 * @return int $intRows
@@ -198,12 +148,26 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	}
 
 	/**
+	 * Monty_MySQL_Easy::sort()
+	 *
+	 * @param string $strBy
+	 * @param int $intAsc
+	 * @return void
+	 */
+	public function sort($strBy, $intAsc = 1)
+	{
+		$this->_boolDirty = true;
+		$this->_arrSorts[] = array($strBy, $intAsc);
+	}
+
+	/**
 	 * Monty_MySQL_Easy::sql()
 	 *
 	 * @param int $intType
 	 * @return string $strQuery
 	 */
-	public function sql($intType = MONTY_QUERY_SELECT) {
+	public function sql($intType = MONTY_QUERY_SELECT)
+	{
 		$this->_buildQuery($intType);
 		return $this->_strQuery;
 	}
@@ -272,6 +236,34 @@ class Monty_MySQL_Easy extends Monty_MySQL
 						}
 						if ($i + 1 < count($this->_arrWheres)) {
 							$strQuery .= ' AND';
+						}
+					}
+				}
+				if (count($this->_arrSorts)) {
+					$strQuery .= ' ORDER BY';
+					for ($i = 0; $i < count($this->_arrSorts); $i++) {
+						$arrSort = $this->_arrSorts[$i];
+						if ($arrSort[0] !== null) {
+							if (stristr($arrSort[0], '.')) {
+								$arrTable = explode('.', $arrSort[0], 2);
+								$strTable = $arrTable[0] . '.`' . $arrTable[1] . '`';
+							}
+							else {
+								$strTable = '`' . $arrSort[0] . '`';
+							}
+							$strQuery .= ' ' . $strTable;
+							if ($arrSort[1] < 0) {
+								$strQuery .= ' DESC';
+							}
+							else {
+								$strQuery .= ' ASC';
+							}
+						}
+						else {
+							$strQuery .= ' RAND()';
+						}
+						if ($i + 1 < count($this->_arrSorts)) {
+							$strQuery .= ',';
 						}
 					}
 				}
