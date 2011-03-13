@@ -245,7 +245,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	public function update($arrFields, $strValue = null)
 	{
 		if ($strValue !== null) {
-			$arrFields = array($arrFields, $strValue);
+			$arrFields = array($arrFields => $strValue);
 		}
 		$this->_arrFields = $arrFields;
 		$this->_boolDirty = true;
