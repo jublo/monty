@@ -317,7 +317,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
 				$strQuery .= $this->_buildQuerySorts();
 				$strQuery .= $this->_buildQueryLimit();
 				break;
-		}die($strQuery);
+		}
 		$this->_boolDirty = false;
 		return $this->query($strQuery);
 	}
