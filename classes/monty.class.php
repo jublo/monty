@@ -29,4 +29,8 @@ class Monty
 				return new Monty_MySQL;
 		}
 	}
+	public static function table($strTable, $strShortcut = '')
+	{
+		return self::getConnector()->table($strTable, $strShortcut);
+	}
 }
