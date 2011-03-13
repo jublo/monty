@@ -242,8 +242,11 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	 * @param array $arrFields
 	 * @return bool $boolHasSucceeded
 	 */
-	public function update($arrFields)
+	public function update($arrFields, $strValue = null)
 	{
+		if ($strValue !== null) {
+			$arrFields = array($arrFields, $strValue);
+		}
 		$this->_arrFields = $arrFields;
 		$this->_boolDirty = true;
 		return $this->_buildQuery(MONTY_QUERY_UPDATE);
@@ -388,7 +391,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	protected function _buildQueryLimit()
 	{
 		$strLimit = '';
-		if($this->_intLimitStart !== null) {
+		if ($this->_intLimitStart !== null) {
 			$strLimit = ' LIMIT ' . $this->_intLimitStart . ', ' . $this->_intLimitCount;
 		}
 		return $strLimit;
