@@ -95,6 +95,17 @@ class Monty_MySQL_Easy extends Monty_MySQL
 	}
 
 	/**
+	 * Monty_MySQL_Easy::delete()
+	 *
+	 * @return bool $boolHasSucceeded
+	 */
+	public function delete()
+	{
+		$this->_boolDirty = true;
+		return $this->_buildQuery(MONTY_QUERY_DELETE);
+	}
+
+	/**
 	 * Monty_MySQL_Easy::insert()
 	 *
 	 * @param array $arrFields
@@ -298,7 +309,15 @@ class Monty_MySQL_Easy extends Monty_MySQL
 				$strQuery .= $this->_buildQuerySorts();
 				$strQuery .= $this->_buildQueryLimit();
 				break;
-		}
+
+			case MONTY_QUERY_DELETE:
+				$strQuery = 'DELETE FROM';
+				$strQuery .= ' `' . $this->_arrTable[0] . '`';
+				$strQuery .= $this->_buildQueryWheres();
+				$strQuery .= $this->_buildQuerySorts();
+				$strQuery .= $this->_buildQueryLimit();
+				break;
+		}die($strQuery);
 		$this->_boolDirty = false;
 		return $this->query($strQuery);
 	}
