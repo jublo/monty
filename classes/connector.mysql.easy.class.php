@@ -288,6 +288,18 @@ class Monty_MySQL_Easy extends Monty_MySQL
     }
 
     /**
+     * Monty_MySQL_Easy::starts()
+     *
+     * @param string $strField
+     * @param string $strValue
+     * @return string
+     */
+    public function starts($strField, $strValue)
+    {
+        return $this->where($strField, 'LIKE', $strValue . '%');
+    }
+
+    /**
      * Monty_MySQL_Easy::update()
      *
      * @param array|string $arrFields
