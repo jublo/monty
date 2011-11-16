@@ -19,15 +19,18 @@
  */
 
 define('MONTY_CONNECTOR_MYSQL', 1);
+define('MONTY_CONNECTOR_MYSQLI', 2);
 
 class Monty
 {
-    public static function getConnector($intType = MONTY_CONNECTOR_MYSQL)
+    public static function getConnector($intType = MONTY_CONNECTOR_MYSQLI)
     {
         switch ($intType)
         {
             case MONTY_CONNECTOR_MYSQL:
                 return new Monty_MySQL;
+            case MONTY_CONNECTOR_MYSQLI:
+                return new Monty_MySQLI;
         }
     }
 
