@@ -254,6 +254,17 @@ class Monty_MySQL_Easy extends Monty_MySQL
     }
 
     /**
+     * Monty_MySQL_Easy::replace()
+     *
+     * @param array $arrFields
+     * @return bool $boolHasSucceeded
+     */
+    public function replace($arrFields)
+    {
+        return $this->insert($arrFields, MONTY_INSERT_REPLACE);
+    }
+
+    /**
      * Monty_MySQL_Easy::rows()
      *
      * @return int $intRows
