@@ -31,7 +31,7 @@ class Monty_MySQL extends Monty_Connector
     /**
      * Monty_MySQL::__construct()
      *
-     * @return void
+     * @return \Monty_MySQL
      */
     public function __construct()
     {
