@@ -161,9 +161,18 @@ class Monty_MySQL extends Monty_Connector
      * @return bool $boolIsOpened
      */
     public function open($strUser, $strPassword, $strDatabase, $strHost =
-        'localhost')
+        'localhost', $intOpenType = MONTY_OPEN_NORMAL)
     {
-        if (!@mysql_connect($strHost, $strUser, $strPassword))
+        $strOpenFunction = '';
+        switch($intOpenType) {
+            case MONTY_OPEN_NORMAL:
+                $strOpenFunction = 'mysql_connect';
+                break;
+            case MONTY_OPEN_PERSISTENT:
+                $strOpenFunction = 'mysql_pconnect';
+                break;
+        }
+        if (!@$strOpenFunction($strHost, $strUser, $strPassword))
         {
             return false;
         }

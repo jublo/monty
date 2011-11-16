@@ -34,6 +34,9 @@ $objConnector->open('youruser', 'fancypass', 'holydatabase');
 // not running the database on localhost? add a 4th parameter like this:
 // $db->open('youruser', 'fancypass', 'holydatabase', 'pentagon.example.com');
 
+// want persistent connection? add a 5th parameter like this:
+// $db->open('youruser', 'fancypass', 'holydatabase', 'pentagon.example.com', MONTY_OPEN_PERSISTENT);
+
 // now there's two operation modes:
 // the EASY one first
 $objTable = $objConnector->table('themaintable');
