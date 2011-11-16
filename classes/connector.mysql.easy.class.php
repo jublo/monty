@@ -657,7 +657,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
         }
         elseif (count($arrWheres) == 1)
         {
-            $arrWheres = array_keys($arrWheres);
+            $arrWheres = array_values($arrWheres);
             return $arrWheres[0];
         }
 
