@@ -38,6 +38,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     protected $_intInsertType;
     protected $_intLimitCount;
     protected $_intLimitStart;
+    protected $_intWheres;
 
     /**
      * Monty_MySQL_Easy::__construct()
@@ -63,6 +64,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
         $this->_intInsertType = null;
         $this->_intLimitCount = null;
         $this->_intLimitStart = null;
+        $this->_intWheres = 0;
     }
 
     /**
@@ -310,7 +312,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
      * @param string $strComparison
      * @param mixed $mixValue
      * @param bool $boolValueIsField
-     * @return string $strWhere
+     * @return string $strHash
      */
     public function where($strField, $strComparison, $mixValue, $boolValueIsField = false)
     {
@@ -340,8 +342,9 @@ class Monty_MySQL_Easy extends Monty_MySQL
             $strWhere .= ' "' . mysql_real_escape_string($mixValue) . '"';
         }
 
-        $this->_arrWheres[md5($strWhere)] = $strWhere;
-        return $strWhere;
+        $strHash = $this->_intWheres++;
+        $this->_arrWheres[$strHash] = $strWhere;
+        return $strHash;
     }
 
     /**
@@ -567,8 +570,9 @@ class Monty_MySQL_Easy extends Monty_MySQL
         $strWheres = '';
         if (count($this->_arrWheres))
         {
+            $strHash = $this->_mergeWheres('AND', array_keys($this->_arrWheres));
             $strWheres .= ' WHERE';
-            $strWheres .= $this->_mergeWheres('AND', $this->_arrWheres, false);
+            $strWheres .= $this->_arrWheres[$strHash];
         }
         return $strWheres;
     }
@@ -578,10 +582,9 @@ class Monty_MySQL_Easy extends Monty_MySQL
      *
      * @param $strOperand
      * @param $arrWheres
-     * @param bool $boolResetWheres
      * @return string
      */
-    protected function _mergeWheres($strOperand, $arrWheres, $boolResetWheres = true)
+    protected function _mergeWheres($strOperand, $arrWheres)
     {
         if (!count($arrWheres))
         {
@@ -589,18 +592,16 @@ class Monty_MySQL_Easy extends Monty_MySQL
         }
         elseif (count($arrWheres) == 1)
         {
-            return array_pop($arrWheres);
+            $arrWheres = array_keys($arrWheres);
+            return $arrWheres[0];
         }
 
         $strWheres = ' (';
         $i = 0;
-        foreach ($arrWheres as $strWhere)
+        foreach ($arrWheres as $strHash)
         {
-            $strWheres .= $strWhere;
-            if ($boolResetWheres)
-            {
-                unset($this->_arrWheres[md5($strWhere)]);
-            }
+            $strWheres .= $this->_arrWheres[$strHash];
+            unset($this->_arrWheres[$strHash]);
             if ($i + 1 < count($arrWheres))
             {
                 $strWheres .= ' ' . $strOperand;
@@ -610,11 +611,9 @@ class Monty_MySQL_Easy extends Monty_MySQL
 
         $strWheres .= ' )';
 
-        if ($boolResetWheres)
-        {
-            $this->_arrWheres[md5($strWheres)] = $strWheres;
-        }
+        $strHash = $this->_intWheres++;
+        $this->_arrWheres[$strHash] = $strWheres;
 
-        return $strWheres;
+        return $strHash;
     }
 }
