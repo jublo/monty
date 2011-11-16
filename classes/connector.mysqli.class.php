@@ -75,16 +75,16 @@ class Monty_MySQLI extends Monty_Connector
         switch ($intType)
         {
             case MONTY_ERROR_STRING:
-                return $this->_DB->error();
+                return $this->_DB->error;
             case MONTY_ERROR_ARRAY:
-                return array('text' => $this->_DB->error(), 'code' => $this->_DB->errno());
+                return array('text' => $this->_DB->error, 'code' => $this->_DB->errno);
             case MONTY_ERROR_OBJECT:
                 $objError = new stdClass;
-                $objError->text = $this->_DB->error();
-                $objError->code = $this->_DB->errno();
+                $objError->text = $this->_DB->error;
+                $objError->code = $this->_DB->errno;
                 return $objError;
             case MONTY_ERROR_NUMERIC:
-                return $this->_DB->errno();
+                return $this->_DB->errno;
         }
     }
 
@@ -99,7 +99,7 @@ class Monty_MySQLI extends Monty_Connector
         {
             return false;
         }
-        return $this->_DB->insert_id();
+        return $this->_DB->insert_id;
     }
 
     /**
