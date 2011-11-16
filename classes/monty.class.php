@@ -23,6 +23,8 @@ define('MONTY_CONNECTOR_MYSQLI', 2);
 
 class Monty
 {
+    protected static $_objConnector = null;
+
     public static function getConnector($intType = MONTY_CONNECTOR_MYSQLI)
     {
         switch ($intType)
@@ -34,8 +36,24 @@ class Monty
         }
     }
 
+    public static function open($strUser, $strPassword, $strDatabase,
+        $strHost = 'localhost', $intOpenType = MONTY_OPEN_NORMAL)
+    {
+        if(!self::$_objConnector)
+            self::storeConnector();
+        self::$_objConnector->open($strUser, $strPassword, $strDatabase,
+                                   $strHost, $intOpenType);
+    }
+
+    public static function storeConnector($intType = MONTY_CONNECTOR_MYSQLI)
+    {
+        self::$_objConnector = self::getConnector($intType);
+    }
+
     public static function table($strTable, $strShortcut = '')
     {
-        return self::getConnector()->table($strTable, $strShortcut);
+        if(!self::$_objConnector)
+            self::storeConnector();
+        return self::$_objConnector->table($strTable, $strShortcut);
     }
 }
