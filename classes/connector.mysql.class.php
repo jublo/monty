@@ -219,7 +219,7 @@ class Monty_MySQL extends Monty_Connector
         {
             return false;
         }
-        return mysql_data_seek($intRow);
+        return mysql_data_seek($this->_resQuery, $intRow);
     }
 
     /**
