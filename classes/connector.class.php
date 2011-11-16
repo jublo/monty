@@ -61,6 +61,7 @@ abstract class Monty_Connector
      * Monty_Connector::error()
      *
      * Get the last operation error.
+     * @param int $intType
      */
     public abstract function error($intType = MONTY_ERROR_STRING);
 
@@ -82,6 +83,10 @@ abstract class Monty_Connector
      * Monty_Connector::open()
      *
      * Open a database connection.
+     * @param string $strUser
+     * @param string $strPassword
+     * @param string $strDatabase
+     * @param string $strHost
      */
     public abstract function open($strUser, $strPassword, $strDatabase, $strHost = 'localhost');
 
@@ -89,6 +94,7 @@ abstract class Monty_Connector
      * Monty_Connector::query()
      *
      * Run a raw database query.
+     * @param string $strQuery
      */
     public abstract function query($strQuery);
 
@@ -103,11 +109,12 @@ abstract class Monty_Connector
      * Monty_Connector::seek()
      *
      * Seek a certain row in the result set.
+     * @param int $intRow
      */
     public abstract function seek($intRow);
 
     /**
-     * Monty_Connector::walksingle()
+     * Monty_Connector::nextfield()
      *
      * Walk through the result set and get the next field.
      */
