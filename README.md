@@ -38,14 +38,20 @@ $objConnector->open('youruser', 'fancypass', 'holydatabase');
 // the EASY one first
 $objTable = $objConnector->table('themaintable');
 
-// want a join?
-// $objTable->join('anothertable');
+// want multiple tables?
+// $objTable->add('anothertable');
 
 // set a condition
 $objTable->where('field', '=', 'value');
 
 // there are some shortcuts, like this one:
 // $objTable->eq('field', 'value');
+
+// you might also want to use ands/ors
+// $objTable->or($objTable->eq('field1', 'value1'),
+//               $objTable->like('field2', 'value2'));
+// equals:
+// ... WHERE field1 = "value1" OR field2 LIKE "value2"
 
 // peek at the generated sql code
 echo $objTable->sql() . '<br />';

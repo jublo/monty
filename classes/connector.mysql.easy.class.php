@@ -29,10 +29,10 @@
 class Monty_MySQL_Easy extends Monty_MySQL
 {
     protected static $_arrComparisons;
+    protected static $_arrOperands;
     protected $_arrFields;
-    protected $_arrJoins;
     protected $_arrSorts;
-    protected $_arrTable;
+    protected $_arrTables;
     protected $_arrWheres;
     protected $_boolDirty;
     protected $_intInsertType;
@@ -44,7 +44,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
      *
      * @param string $strTable
      * @param string $strShortcut
-     * @return void
+     * @return \Monty_MySQL_Easy
      */
     public function __construct($strTable, $strShortcut = null)
     {
@@ -53,10 +53,11 @@ class Monty_MySQL_Easy extends Monty_MySQL
         {
             $strShortcut = substr($strTable, 0, 1);
         }
-        self::$_arrComparisons = array('eq' => '=', 'gt' => '>', 'gte' => '>=', 'like' =>
-        'LIKE', 'lt' => '<', 'lte' => '<=', 'ne' => '!=', 'regexp' => 'REGEXP');
-        $this->_arrJoins = array();
-        $this->_arrTable = array($strTable, $strShortcut);
+        self::$_arrComparisons = array('eq' => '=', 'gt' => '>', 'gte' => '>=',
+                                       'like' => 'LIKE', 'lt' => '<', 'lte' => '<=',
+                                       'ne' => '!=', 'regexp' => 'REGEXP');
+        self::$_arrOperands = array('and' => 'AND', 'or' => 'OR');
+        $this->_arrTables = array(array($strTable, $strShortcut));
         $this->_arrWheres = array();
         $this->_boolDirty = true;
         $this->_intInsertType = null;
@@ -69,20 +70,42 @@ class Monty_MySQL_Easy extends Monty_MySQL
      *
      * @param string $strMethod
      * @param array $arrParams
-     * @return mixed $mixReturn
+     * @return string $mixReturn
      */
     public function __call($strMethod, $arrParams)
     {
         if (substr($strMethod, 0, 1) == '_')
         {
             trigger_error("$strMethod is not a public method.", E_USER_ERROR);
-            return;
+            return '';
         }
         if (in_array($strMethod, array_keys(self::$_arrComparisons)))
         {
-            return $this->where($arrParams[0], self::$_arrComparisons[$strMethod], $arrParams[1]);
+            $boolValueIsField = isset($arrParams[2]) ? $arrParams[2] : false;
+            return $this->where($arrParams[0],
+                                self::$_arrComparisons[$strMethod],
+                                $arrParams[1],
+                                $boolValueIsField);
+        }
+        if (in_array($strMethod, array_keys(self::$_arrOperands)))
+        {
+            return $this->_mergeWheres(self::$_arrOperands[$strMethod],
+                                       $arrParams);
         }
         trigger_error("$strMethod is not a method.", E_USER_ERROR);
+    }
+
+    /**
+     * Monty_MySQL_Easy::add()
+     *
+     * @param string $strTable
+     * @param string|null $strShortcut
+     * @return void
+     */
+    public function add($strTable, $strShortcut = null)
+    {
+        $this->_boolDirty = true;
+        $this->_arrTables[] = array($strTable, $strShortcut);
     }
 
     /**
@@ -109,6 +132,24 @@ class Monty_MySQL_Easy extends Monty_MySQL
     }
 
     /**
+     * Monty_MySQL_Easy::fields()
+     *
+     * @param $arrFields
+     * @return void
+     */
+    public function fields($arrFields)
+    {
+        if (is_array($arrFields))
+        {
+            $this->_arrFields = $arrFields;
+        }
+        else
+        {
+            $this->_arrFields = func_get_args();
+        }
+    }
+
+    /**
      * Monty_MySQL_Easy::insert()
      *
      * @param array $arrFields
@@ -121,20 +162,6 @@ class Monty_MySQL_Easy extends Monty_MySQL
         $this->_boolDirty = true;
         $this->_intInsertType = $intType;
         return $this->_buildQuery(MONTY_QUERY_INSERT);
-    }
-
-    /**
-     * Monty_MySQL_Easy::join()
-     *
-     * @param string $strTable
-     * @param string $strShortcut
-     * @param int $intJoin
-     * @return void
-     */
-    public function join($strTable, $strShortcut, $intJoin = MONTY_JOIN_NORMAL)
-    {
-        $this->_boolDirty = true;
-        $this->_arrJoins[] = array($strTable, $intJoin);
     }
 
     /**
@@ -180,7 +207,23 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function nextfield($mixField = 0)
     {
         $this->_buildQuery();
-        return parent::nextfield($mixField = 0);
+        return parent::nextfield($mixField);
+    }
+
+    /**
+     * Monty_MySQL_Easy::query()
+     *
+     * @param string $strQuery
+     * @return bool $boolHasSucceeded
+     */
+    public function query($strQuery)
+    {
+        if (!parent::query($strQuery))
+        {
+            trigger_error($this->error(), E_USER_ERROR);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -245,7 +288,8 @@ class Monty_MySQL_Easy extends Monty_MySQL
     /**
      * Monty_MySQL_Easy::update()
      *
-     * @param array $arrFields
+     * @param array|string $arrFields
+     * @param string $strValue
      * @return bool $boolHasSucceeded
      */
     public function update($arrFields, $strValue = null)
@@ -265,12 +309,39 @@ class Monty_MySQL_Easy extends Monty_MySQL
      * @param string $strField
      * @param string $strComparison
      * @param mixed $mixValue
-     * @return void
+     * @param bool $boolValueIsField
+     * @return string $strWhere
      */
-    public function where($strField, $strComparison, $mixValue)
+    public function where($strField, $strComparison, $mixValue, $boolValueIsField = false)
     {
         $this->_boolDirty = true;
-        $this->_arrWheres[] = array($strField, $strComparison, $mixValue);
+        $strWhere = '';
+        if (stristr($strField, '.'))
+        {
+            $arrField = explode('.', $strField, 2);
+            $strField = $arrField[0] . '.`' . $arrField[1] . '`';
+        }
+        else
+        {
+            $strField = '`' . $strField . '`';
+        }
+        $strWhere .= ' ' . $strField . ' ' . $strComparison;
+        if (is_null($mixValue))
+        {
+            $strWhere .= ' NULL';
+        }
+        elseif ($boolValueIsField)
+        {
+            $arrField = explode('.', $mixValue, 2);
+            $strWhere .= ' ' . $arrField[0] . '.`' . $arrField[1] . '`';
+        }
+        else
+        {
+            $strWhere .= ' "' . mysql_real_escape_string($mixValue) . '"';
+        }
+
+        $this->_arrWheres[md5($strWhere)] = $strWhere;
+        return $strWhere;
     }
 
     /**
@@ -286,12 +357,30 @@ class Monty_MySQL_Easy extends Monty_MySQL
         {
             return false;
         }
+        $strQuery = '';
         switch ($intType)
         {
             case MONTY_QUERY_SELECT:
-                $strQuery = 'SELECT * FROM `' . $this->_arrTable[0] . '` ' . $this->
-                _arrTable[1];
-                $strQuery .= $this->_buildQueryJoins();
+                $strQuery = 'SELECT ';
+                if (count($this->_arrFields))
+                {
+                    $strQuery .= $this->_buildQueryFields($intType);
+                }
+                else
+                {
+                    $strQuery .= '*';
+                }
+                $strQuery .= ' FROM';
+                $i = 0;
+                foreach ($this->_arrTables as $arrTable)
+                {
+                    $strQuery .= ' `' . $arrTable[0] . '` ' . $arrTable[1];
+                    if ($i + 1 < count($this->_arrTables))
+                    {
+                        $strQuery .= ',';
+                    }
+                    $i++;
+                }
                 $strQuery .= $this->_buildQueryWheres();
                 $strQuery .= $this->_buildQuerySorts();
                 $strQuery .= $this->_buildQueryLimit();
@@ -310,14 +399,14 @@ class Monty_MySQL_Easy extends Monty_MySQL
                         $strQuery = 'REPLACE INTO';
                         break;
                 }
-                $strQuery .= ' `' . $this->_arrTable[0] . '`';
-                $strQuery .= $this->_buildQueryFields();
+                $strQuery .= ' `' . $this->_arrTables[0][0] . '`';
+                $strQuery .= $this->_buildQueryFields($intType);
                 break;
 
             case MONTY_QUERY_UPDATE:
                 $strQuery = 'UPDATE';
-                $strQuery .= ' `' . $this->_arrTable[0] . '`';
-                $strQuery .= $this->_buildQueryFields();
+                $strQuery .= ' `' . $this->_arrTables[0][0] . '`';
+                $strQuery .= $this->_buildQueryFields($intType);
                 $strQuery .= $this->_buildQueryWheres();
                 $strQuery .= $this->_buildQuerySorts();
                 $strQuery .= $this->_buildQueryLimit();
@@ -325,7 +414,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
 
             case MONTY_QUERY_DELETE:
                 $strQuery = 'DELETE FROM';
-                $strQuery .= ' `' . $this->_arrTable[0] . '`';
+                $strQuery .= ' `' . $this->_arrTables[0][0] . '`';
                 $strQuery .= $this->_buildQueryWheres();
                 $strQuery .= $this->_buildQuerySorts();
                 $strQuery .= $this->_buildQueryLimit();
@@ -338,67 +427,71 @@ class Monty_MySQL_Easy extends Monty_MySQL
     /**
      * Monty_MySQL_Easy::_buildQueryFields()
      *
+     * @param int $intType
      * @return string $strFields
      */
-    protected function _buildQueryFields()
+    protected function _buildQueryFields($intType)
     {
-        $strFields = ' SET';
-        $i = 0;
-        foreach ($this->_arrFields as $strField => $strValue)
+        $strFields = '';
+        switch ($intType)
         {
-            $arrField = array($strField, $strValue);
-            if (stristr($arrField[0], '.'))
-            {
-                $arrFieldName = explode('.', $arrField[0], 2);
-                $strField = '`' . $arrFieldName[1] . '`';
-            }
-            else
-            {
-                $strField = '`' . $arrField[0] . '`';
-            }
-            $strFields .= ' ' . $strField . ' =';
-            if (is_null($arrField[1]))
-            {
-                $strFields .= ' NULL';
-            }
-            else
-            {
-                $strFields .= ' "' . mysql_real_escape_string($arrField[1]) . '"';
-            }
-            if ($i + 1 < count($this->_arrFields))
-            {
-                $strFields .= ',';
-            }
-            $i++;
+            case MONTY_QUERY_SELECT:
+                $i = 0;
+                foreach ($this->_arrFields as $strField)
+                {
+                    if (stristr($strField, '.'))
+                    {
+                        $arrFieldName = explode('.', $strField, 2);
+                        $strField = $arrFieldName[0] . '.`' . $arrFieldName[1] . '`';
+                    }
+                    else
+                    {
+                        $strField = '`' . $strField . '`';
+                    }
+                    $strFields .= ' ' . $strField;
+                    if ($i + 1 < count($this->_arrFields))
+                    {
+                        $strFields .= ',';
+                    }
+                    $i++;
+                }
+                break;
+
+            case MONTY_QUERY_INSERT:
+            case MONTY_QUERY_UPDATE:
+            case MONTY_QUERY_DELETE:
+                $strFields = ' SET';
+                $i = 0;
+                foreach ($this->_arrFields as $strField => $strValue)
+                {
+                    $arrField = array($strField, $strValue);
+                    if (stristr($arrField[0], '.'))
+                    {
+                        $arrFieldName = explode('.', $arrField[0], 2);
+                        $strField = '`' . $arrFieldName[1] . '`';
+                    }
+                    else
+                    {
+                        $strField = '`' . $arrField[0] . '`';
+                    }
+                    $strFields .= ' ' . $strField . ' =';
+                    if (is_null($arrField[1]))
+                    {
+                        $strFields .= ' NULL';
+                    }
+                    else
+                    {
+                        $strFields .= ' "' . mysql_real_escape_string($arrField[1]) . '"';
+                    }
+                    if ($i + 1 < count($this->_arrFields))
+                    {
+                        $strFields .= ',';
+                    }
+                    $i++;
+                }
+                break;
         }
         return $strFields;
-    }
-
-    /**
-     * Monty_MySQL_Easy::_buildQueryJoins()
-     *
-     * @return string $strJoins
-     */
-    protected function _buildQueryJoins()
-    {
-        $strJoins = '';
-        foreach ($this->_arrJoins as $arrJoin)
-        {
-            switch ($arrJoin[2])
-            {
-                case MONTY_JOIN_NORMAL:
-                    $strJoins .= ' JOIN';
-                    break;
-                case MONTY_JOIN_LEFT:
-                    $strJoins .= ' LEFT JOIN';
-                    break;
-                case MONTY_JOIN_RIGHT:
-                    $strJoins .= ' RIGHT JOIN';
-                    break;
-            }
-            $strJoins .= ' `' . $arrJoin[0] . '` ' . $arrJoin[1];
-        }
-        return $strJoins;
     }
 
     /**
@@ -471,37 +564,57 @@ class Monty_MySQL_Easy extends Monty_MySQL
      */
     protected function _buildQueryWheres()
     {
-        $strJoins = '';
+        $strWheres = '';
         if (count($this->_arrWheres))
         {
-            $strJoins .= ' WHERE';
-            for ($i = 0; $i < count($this->_arrWheres); $i++)
-            {
-                $arrWhere = $this->_arrWheres[$i];
-                if (stristr($arrWhere[0], '.'))
-                {
-                    $arrField = explode('.', $arrWhere[0], 2);
-                    $strField = $arrField[0] . '.`' . $arrField[1] . '`';
-                }
-                else
-                {
-                    $strField = '`' . $arrWhere[0] . '`';
-                }
-                $strJoins .= ' ' . $strField . ' ' . $arrWhere[1];
-                if (is_null($arrWhere[2]))
-                {
-                    $strJoins .= ' NULL';
-                }
-                else
-                {
-                    $strJoins .= ' "' . mysql_real_escape_string($arrWhere[2]) . '"';
-                }
-                if ($i + 1 < count($this->_arrWheres))
-                {
-                    $strJoins .= ' AND';
-                }
-            }
+            $strWheres .= ' WHERE';
+            $strWheres .= $this->_mergeWheres('AND', $this->_arrWheres, false);
         }
-        return $strJoins;
+        return $strWheres;
+    }
+
+    /**
+     * Monty_MySQL_Easy::_mergeWheres()
+     *
+     * @param $strOperand
+     * @param $arrWheres
+     * @param bool $boolResetWheres
+     * @return string
+     */
+    protected function _mergeWheres($strOperand, $arrWheres, $boolResetWheres = true)
+    {
+        if (!count($arrWheres))
+        {
+            return '';
+        }
+        elseif (count($arrWheres) == 1)
+        {
+            return array_pop($arrWheres);
+        }
+
+        $strWheres = ' (';
+        $i = 0;
+        foreach ($arrWheres as $strWhere)
+        {
+            $strWheres .= $strWhere;
+            if ($boolResetWheres)
+            {
+                unset($this->_arrWheres[md5($strWhere)]);
+            }
+            if ($i + 1 < count($arrWheres))
+            {
+                $strWheres .= ' ' . $strOperand;
+            }
+            $i++;
+        }
+
+        $strWheres .= ' )';
+
+        if ($boolResetWheres)
+        {
+            $this->_arrWheres[md5($strWheres)] = $strWheres;
+        }
+
+        return $strWheres;
     }
 }
