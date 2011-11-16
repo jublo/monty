@@ -20,7 +20,7 @@ at least PHP 5.2, or any higher version.
 First steps
 -----------
 
-```php
+<pre lang="php"><code>
 
 // load monty
 require 'monty/loader.php';
@@ -65,4 +65,4 @@ for($i = 0; $i < $objTable->rows(); $i++) {
 $objConnector->query('SELECT * FROM themaintable WHERE field = "value"');
 echo $objConnector->rows();
 
-```
+</code></pre>
