@@ -325,6 +325,17 @@ class Monty_MySQL_Easy extends Monty_MySQL
     }
 
     /**
+     * Monty_MySQL_Easy::truncate()
+     *
+     * @return bool $boolHasSucceeded
+     */
+    public function truncate()
+    {
+        $this->_boolDirty = true;
+        return $this->_buildQuery(MONTY_QUERY_TRUNCATE);
+    }
+
+    /**
      * Monty_MySQL_Easy::update()
      *
      * @param array|string $arrFields
@@ -458,6 +469,11 @@ class Monty_MySQL_Easy extends Monty_MySQL
                 $strQuery .= $this->_buildQueryWheres();
                 $strQuery .= $this->_buildQuerySorts();
                 $strQuery .= $this->_buildQueryLimit();
+                break;
+
+            case MONTY_QUERY_TRUNCATE:
+                $strQuery = 'TRUNCATE';
+                $strQuery .= ' `' . $this->_arrTables[0][0] . '`';
                 break;
         }
         $this->_boolDirty = false;

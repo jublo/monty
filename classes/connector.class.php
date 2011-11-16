@@ -40,6 +40,7 @@ define('MONTY_QUERY_SELECT', 1);
 define('MONTY_QUERY_INSERT', 2);
 define('MONTY_QUERY_UPDATE', 3);
 define('MONTY_QUERY_DELETE', 4);
+define('MONTY_QUERY_TRUNCATE', 5);
 
 /**
  * Monty_Connector
