@@ -1,10 +1,14 @@
-monty is a simple database wrapper.
+**monty is a simple database wrapper.**
+
 https://github.com/mynetx/monty
---------------------------------------------------------------------------
-This project is licensed under the GNU Lesser General Public License V3.
+
+---
+
+*This project is licensed under the GNU Lesser General Public License V3.
 Find more details in the LICENSE file.
-You must not redistribute the project files without README and LICENSE.
---------------------------------------------------------------------------
+You must not redistribute the project files without README and LICENSE.*
+
+---
 
 System requirements
 -------------------
@@ -15,6 +19,8 @@ at least PHP 5.2, or any higher version.
 
 First steps
 -----------
+
+```php
 
 // load monty
 require 'monty/loader.php';
@@ -46,8 +52,8 @@ echo $objTable->sql() . '<br />';
 
 // loop through the results and display them
 for($i = 0; $i < $objTable->rows(); $i++) {
-	$arrRow = $objTable->next();
-	echo $arrRow['field'] . ' = ' . $arrRow['value'] . '<br />';
+    $arrRow = $objTable->next();
+    echo $arrRow['field'] . ' = ' . $arrRow['value'] . '<br />';
 }
 
 // you could also have got an object instead, like this:
@@ -59,4 +65,4 @@ for($i = 0; $i < $objTable->rows(); $i++) {
 $objConnector->query('SELECT * FROM themaintable WHERE field = "value"');
 echo $objConnector->rows();
 
-
+```
