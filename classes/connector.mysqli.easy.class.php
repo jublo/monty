@@ -127,6 +127,18 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     }
 
     /**
+     * Monty_MySQLI_Easy::contains()
+     *
+     * @param string $strField
+     * @param string $strValue
+     * @return string
+     */
+    public function contains($strField, $strValue)
+    {
+        return $this->where($strField, 'LIKE', '%' . $strValue . '%');
+    }
+
+    /**
      * Monty_MySQLI_Easy::delete()
      *
      * @return bool $boolHasSucceeded
