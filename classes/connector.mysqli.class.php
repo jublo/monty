@@ -51,7 +51,7 @@ class Monty_MySQLI extends Monty_Connector
      */
     public function all($intType = MONTY_ALL_ARRAY)
     {
-        if (!$this->_strQuery)
+        if (!$this->_resQuery)
         {
             return false;
         }
@@ -110,7 +110,7 @@ class Monty_MySQLI extends Monty_Connector
      */
     public function next($intType = MONTY_NEXT_ARRAY)
     {
-        if (!$this->_strQuery)
+        if (!$this->_resQuery)
         {
             return false;
         }
@@ -132,7 +132,7 @@ class Monty_MySQLI extends Monty_Connector
      */
     public function nextfield($mixField = 0)
     {
-        if (!$this->_strQuery)
+        if (!$this->_resQuery)
         {
             return false;
         }
@@ -167,7 +167,8 @@ class Monty_MySQLI extends Monty_Connector
         'localhost', $intOpenType = MONTY_OPEN_NORMAL)
     {
         $strHostString = '';
-        switch($intOpenType) {
+        switch ($intOpenType)
+        {
             case MONTY_OPEN_NORMAL:
                 $strHostString = $strHost;
                 break;
@@ -196,6 +197,10 @@ class Monty_MySQLI extends Monty_Connector
         {
             return false;
         }
+        if ($resQuery === true)
+        {
+            return true;
+        }
         $this->_resQuery = $resQuery;
         $this->_intRows = $resQuery->num_rows;
         return true;
@@ -208,7 +213,7 @@ class Monty_MySQLI extends Monty_Connector
      */
     public function rows()
     {
-        if (!$this->_strQuery)
+        if (!$this->_resQuery)
         {
             return false;
         }
@@ -223,7 +228,7 @@ class Monty_MySQLI extends Monty_Connector
      */
     public function seek($intRow)
     {
-        if (!$this->_strQuery)
+        if (!$this->_resQuery)
         {
             return false;
         }

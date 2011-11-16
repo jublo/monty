@@ -48,7 +48,7 @@ class Monty_MySQL extends Monty_Connector
      */
     public function all($intType = MONTY_ALL_ARRAY)
     {
-        if (!$this->_strQuery)
+        if (!$this->_resQuery)
         {
             return false;
         }
@@ -107,7 +107,7 @@ class Monty_MySQL extends Monty_Connector
      */
     public function next($intType = MONTY_NEXT_ARRAY)
     {
-        if (!$this->_strQuery)
+        if (!$this->_resQuery)
         {
             return false;
         }
@@ -129,7 +129,7 @@ class Monty_MySQL extends Monty_Connector
      */
     public function nextfield($mixField = 0)
     {
-        if (!$this->_strQuery)
+        if (!$this->_resQuery)
         {
             return false;
         }
@@ -209,7 +209,7 @@ class Monty_MySQL extends Monty_Connector
      */
     public function rows()
     {
-        if (!$this->_strQuery)
+        if (!$this->_resQuery)
         {
             return false;
         }
@@ -224,7 +224,7 @@ class Monty_MySQL extends Monty_Connector
      */
     public function seek($intRow)
     {
-        if (!$this->_strQuery)
+        if (!$this->_resQuery)
         {
             return false;
         }
