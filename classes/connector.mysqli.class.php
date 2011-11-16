@@ -180,6 +180,7 @@ class Monty_MySQLI extends Monty_Connector
         {
             return false;
         }
+        $this->_DB->set_charset('utf8');
         return true;
     }
 

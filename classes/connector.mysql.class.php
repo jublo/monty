@@ -180,6 +180,7 @@ class Monty_MySQL extends Monty_Connector
         {
             return false;
         }
+        @mysql_set_charset('utf8');
         return true;
     }
 
