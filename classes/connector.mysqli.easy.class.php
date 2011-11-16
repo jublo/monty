@@ -233,6 +233,20 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     }
 
     /**
+     * Monty_MySQLI_Easy::queryall()
+     *
+     * @param string $strQuery
+     * @param int $intType
+     * @return array
+     */
+    public function queryall($strQuery, $intType = MONTY_NEXT_ARRAY)
+    {
+        $this->query($strQuery);
+        $this->_boolDirty = false;
+        return $this->all($intType);
+    }
+
+    /**
      * Monty_MySQLI_Easy::rand()
      *
      * @return void
