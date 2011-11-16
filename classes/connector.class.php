@@ -50,65 +50,66 @@ define('MONTY_QUERY_DELETE', 4);
  * @copyright 2011
  * @access protected
  */
-abstract class Monty_Connector {
+abstract class Monty_Connector
+{
 
-	protected $_intRows;
-	protected $_resQuery;
-	protected $_strQuery;
+    protected $_intRows;
+    protected $_resQuery;
+    protected $_strQuery;
 
-	/**
-	 * Monty_Connector::error()
-	 *
-	 * Get the last operation error.
-	 */
-	public abstract function error($intType = MONTY_ERROR_STRING);
+    /**
+     * Monty_Connector::error()
+     *
+     * Get the last operation error.
+     */
+    public abstract function error($intType = MONTY_ERROR_STRING);
 
-	/**
-	 * Monty_Connector::id()
-	 *
-	 * Get the last inserted auto-id.
-	 */
-	public abstract function id();
+    /**
+     * Monty_Connector::id()
+     *
+     * Get the last inserted auto-id.
+     */
+    public abstract function id();
 
-	/**
-	 * Monty_Connector::next()
-	 *
-	 * Walk through the result set.
-	 */
-	public abstract function next();
+    /**
+     * Monty_Connector::next()
+     *
+     * Walk through the result set.
+     */
+    public abstract function next();
 
-	/**
-	 * Monty_Connector::open()
-	 *
-	 * Open a database connection.
-	 */
-	public abstract function open($strUser, $strPassword, $strDatabase, $strHost = 'localhost');
+    /**
+     * Monty_Connector::open()
+     *
+     * Open a database connection.
+     */
+    public abstract function open($strUser, $strPassword, $strDatabase, $strHost = 'localhost');
 
-	/**
-	 * Monty_Connector::query()
-	 *
-	 * Run a raw database query.
-	 */
-	public abstract function query($strQuery);
+    /**
+     * Monty_Connector::query()
+     *
+     * Run a raw database query.
+     */
+    public abstract function query($strQuery);
 
-	/**
-	 * Monty_Connector::rows()
-	 *
-	 * Get the number of rows in the result set.
-	 */
-	public abstract function rows();
+    /**
+     * Monty_Connector::rows()
+     *
+     * Get the number of rows in the result set.
+     */
+    public abstract function rows();
 
-	/**
-	 * Monty_Connector::seek()
-	 *
-	 * Seek a certain row in the result set.
-	 */
-	public abstract function seek($intRow);
+    /**
+     * Monty_Connector::seek()
+     *
+     * Seek a certain row in the result set.
+     */
+    public abstract function seek($intRow);
 
-	/**
-	 * Monty_Connector::walksingle()
-	 *
-	 * Walk through the result set and get the next field.
-	 */
-	public abstract function nextfield();
+    /**
+     * Monty_Connector::walksingle()
+     *
+     * Walk through the result set and get the next field.
+     */
+    public abstract function nextfield();
 }

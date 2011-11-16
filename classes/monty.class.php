@@ -22,15 +22,17 @@ define('MONTY_CONNECTOR_MYSQL', 1);
 
 class Monty
 {
-	public static function getConnector($intType = MONTY_CONNECTOR_MYSQL)
-	{
-		switch ($intType) {
-			case MONTY_CONNECTOR_MYSQL:
-				return new Monty_MySQL;
-		}
-	}
-	public static function table($strTable, $strShortcut = '')
-	{
-		return self::getConnector()->table($strTable, $strShortcut);
-	}
+    public static function getConnector($intType = MONTY_CONNECTOR_MYSQL)
+    {
+        switch ($intType)
+        {
+            case MONTY_CONNECTOR_MYSQL:
+                return new Monty_MySQL;
+        }
+    }
+
+    public static function table($strTable, $strShortcut = '')
+    {
+        return self::getConnector()->table($strTable, $strShortcut);
+    }
 }
