@@ -20,7 +20,7 @@
 
 // load classes
 
-$strDirectory = dirname(__file__) . '/classes/';
+$strDirectory = dirname(__FILE__) . '/classes/';
 
 require_once $strDirectory . 'monty.class.php';
 require_once $strDirectory . 'connector.class.php';
