@@ -450,7 +450,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
                 }
                 $strQuery .= $this->_buildQueryWheres();
                 $strQuery .= $this->_buildQuerySorts();
-                $strQuery .= $this->_buildQueryLimit();
+                $strQuery .= $this->_buildQueryLimit($intType);
                 break;
 
             case MONTY_QUERY_INSERT:
@@ -476,7 +476,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
                 $strQuery .= $this->_buildQueryFields($intType);
                 $strQuery .= $this->_buildQueryWheres();
                 $strQuery .= $this->_buildQuerySorts();
-                $strQuery .= $this->_buildQueryLimit();
+                $strQuery .= $this->_buildQueryLimit($intType);
                 break;
 
             case MONTY_QUERY_DELETE:
@@ -484,7 +484,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
                 $strQuery .= ' `' . $this->_arrTables[0][0] . '`';
                 $strQuery .= $this->_buildQueryWheres();
                 $strQuery .= $this->_buildQuerySorts();
-                $strQuery .= $this->_buildQueryLimit();
+                $strQuery .= $this->_buildQueryLimit($intType);
                 break;
 
             case MONTY_QUERY_TRUNCATE:
@@ -569,14 +569,19 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     /**
      * Monty_MySQLI_Easy::_buildQueryLimit()
      *
+     * @param int $intType
      * @return string $strLimit
      */
-    protected function _buildQueryLimit()
+    protected function _buildQueryLimit($intType)
     {
         $strLimit = '';
         if ($this->_intLimitStart !== null)
         {
             $strLimit = ' LIMIT ' . $this->_intLimitStart . ', ' . $this->_intLimitCount;
+        }
+        if ($intType != MONTY_QUERY_SELECT && $this->_intLimitCount !== null)
+        {
+            $strLimit = ' LIMIT ' . $this->_intLimitCount;
         }
         return $strLimit;
     }
