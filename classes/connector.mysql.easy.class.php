@@ -394,18 +394,23 @@ class Monty_MySQL_Easy extends Monty_MySQL
         {
             $strField = '`' . $strField . '`';
         }
-        $strWhere .= ' ' . $strField . ' ' . $strComparison;
+        $strWhere .= ' ' . $strField;
         if (is_null($mixValue)) {
+            if ($strComparison == '=')
+                $strWhere .= ' IS';
+            else {
+                $strWhere .= ' IS NOT';
+            }
             $strWhere .= ' NULL';
         }
         elseif ($boolValueIsField)
         {
             $arrField = explode('.', $mixValue, 2);
-            $strWhere .= ' ' . $arrField[0] . '.`' . $arrField[1] . '`';
+            $strWhere .=  ' ' . $strComparison . ' ' . $arrField[0] . '.`' . $arrField[1] . '`';
         }
         else
         {
-            $strWhere .= ' "' . mysql_real_escape_string($mixValue) . '"';
+            $strWhere .= ' ' . $strComparison . ' "' . mysql_real_escape_string($mixValue) . '"';
         }
 
         $strHash = $this->_intWheres++;
@@ -634,7 +639,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
             foreach ($this->_arrJoins as $arrJoin)
             {
                 $intJoinType = $arrJoin[2];
-                switch($intJoinType)
+                switch ($intJoinType)
                 {
                     case MONTY_JOIN_NORMAL:
                         $strJoins .= ' JOIN';

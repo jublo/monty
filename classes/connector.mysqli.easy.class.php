@@ -401,8 +401,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     {
         $this->_boolDirty = true;
         $strWhere = '';
-        if (stristr($strField, '.'))
-        {
+        if (stristr($strField, '.')) {
             $arrField = explode('.', $strField, 2);
             $strField = $arrField[0] . '.`' . $arrField[1] . '`';
         }
@@ -410,19 +409,23 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
         {
             $strField = '`' . $strField . '`';
         }
-        $strWhere .= ' ' . $strField . ' ' . $strComparison;
-        if (is_null($mixValue))
-        {
+        $strWhere .= ' ' . $strField;
+        if (is_null($mixValue)) {
+            if ($strComparison == '=')
+                $strWhere .= ' IS';
+            else {
+                $strWhere .= ' IS NOT';
+            }
             $strWhere .= ' NULL';
         }
         elseif ($boolValueIsField)
         {
             $arrField = explode('.', $mixValue, 2);
-            $strWhere .= ' ' . $arrField[0] . '.`' . $arrField[1] . '`';
+            $strWhere .=  ' ' . $strComparison . ' ' . $arrField[0] . '.`' . $arrField[1] . '`';
         }
         else
         {
-            $strWhere .= ' "' . $this->_DB->real_escape_string($mixValue) . '"';
+            $strWhere .= ' ' . $strComparison . ' "' . $this->_DB->real_escape_string($mixValue) . '"';
         }
 
         $strHash = $this->_intWheres++;
