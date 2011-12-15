@@ -31,6 +31,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     protected static $_arrComparisons;
     protected static $_arrOperands;
     protected $_arrFields;
+    protected $_arrJoins;
     protected $_arrSorts;
     protected $_arrTables;
     protected $_arrWheres;
@@ -58,6 +59,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
                                        'like' => 'LIKE', 'lt' => '<', 'lte' => '<=',
                                        'ne' => '!=', 'regexp' => 'REGEXP');
         self::$_arrOperands = array('and' => 'AND', 'or' => 'OR');
+        $this->_arrJoins = array();
         $this->_arrTables = array(array($strTable, $strShortcut));
         $this->_arrWheres = array();
         $this->_boolDirty = true;
@@ -99,6 +101,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
                                        $arrParams);
         }
         trigger_error("$strMethod is not a method.", E_USER_ERROR);
+        return false;
     }
 
     /**
@@ -180,6 +183,22 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
         $this->_boolDirty = true;
         $this->_intInsertType = $intType;
         return $this->_buildQuery(MONTY_QUERY_INSERT);
+    }
+
+    /**
+     * Monty_MySQLI_Easy::join()
+     *
+     * @param string $strTable
+     * @param string|null $strShortcut
+     * @param int $intJoinType
+     * @param $strOn1
+     * @param $strOn2
+     * @return void
+     */
+    public function join($strTable, $strShortcut = null, $intJoinType = MONTY_JOIN_NORMAL, $strOn1, $strOn2)
+    {
+        $this->_boolDirty = true;
+        $this->_arrJoins[] = array($strTable, $strShortcut, $intJoinType, $strOn1, $strOn2);
     }
 
     /**
@@ -448,6 +467,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
                     }
                     $i++;
                 }
+                $strQuery .= $this->_buildQueryJoins();
                 $strQuery .= $this->_buildQueryWheres();
                 $strQuery .= $this->_buildQuerySorts();
                 $strQuery .= $this->_buildQueryLimit($intType);
@@ -632,6 +652,41 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
             }
         }
         return $strSorts;
+    }
+
+    /**
+     * Monty_MySQLI_Easy::_buildQueryJoins()
+     *
+     * @return string $strJoins
+     */
+    protected function _buildQueryJoins()
+    {
+        $strJoins = '';
+        if (count($this->_arrJoins)) {
+            foreach ($this->_arrJoins as $arrJoin)
+            {
+                $intJoinType = $arrJoin[2];
+                switch($intJoinType)
+                {
+                    case MONTY_JOIN_NORMAL:
+                        $strJoins .= ' JOIN';
+                        break;
+                    case MONTY_JOIN_LEFT:
+                        $strJoins .= ' LEFT JOIN';
+                        break;
+                    case MONTY_JOIN_RIGHT:
+                        $strJoins .= ' RIGHT JOIN';
+                        break;
+                }
+                $strJoins .= ' `' . $arrJoin[0] . '` ' . $arrJoin[1];
+                $strJoins .= ' ON (';
+                $arrOn1 = explode('.', $arrJoin[3]);
+                $arrOn2 = explode('.', $arrJoin[4]);
+                $strJoins .= ' ' . $arrOn1[0] . '.`' . $arrOn1[1] . '`';
+                $strJoins .= ' = ' . $arrOn2[0] . '.`' . $arrOn2[1] . '`)';
+            }
+        }
+        return $strJoins;
     }
 
     /**
