@@ -97,6 +97,10 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
         }
         if (in_array($strMethod, array_keys(self::$_arrOperands)))
         {
+            if (count($arrParams) == 1 && is_array($arrParams[0]))
+            {
+                $arrParams = $arrParams[0];
+            }
             return $this->_mergeWheres(self::$_arrOperands[$strMethod],
                                        $arrParams);
         }
