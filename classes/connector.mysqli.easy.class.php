@@ -3,17 +3,17 @@
 /**
  * monty is a simple database wrapper.
  * Copyright (C) 2011 mynetx.
-
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
-
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
-
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -55,10 +55,18 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
         {
             $strShortcut = substr($strTable, 0, 1);
         }
-        self::$_arrComparisons = array('eq' => '=', 'gt' => '>', 'gte' => '>=',
-                                       'like' => 'LIKE', 'lt' => '<', 'lte' => '<=',
-                                       'ne' => '!=', 'regexp' => 'REGEXP');
-        self::$_arrOperands = array('and' => 'AND', 'or' => 'OR');
+        self::$_arrComparisons = array(
+            'eq' => '=',
+            'gt' => '>',
+            'gte' => '>=',
+            'like' => 'LIKE',
+            'lt' => '<',
+            'lte' => '<=',
+            'ne' => '!=',
+            'regexp' => 'REGEXP');
+        self::$_arrOperands = array(
+            'and' => 'AND',
+            'or' => 'OR');
         $this->_arrJoins = array();
         $this->_arrTables = array(array($strTable, $strShortcut));
         $this->_arrWheres = array();
@@ -90,19 +98,22 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
         if (in_array($strMethod, array_keys(self::$_arrComparisons)))
         {
             $boolValueIsField = isset($arrParams[2]) ? $arrParams[2] : false;
-            return $this->where($arrParams[0],
-                                self::$_arrComparisons[$strMethod],
-                                $arrParams[1],
-                                $boolValueIsField);
+            return $this->where(
+                $arrParams[0],
+                self::$_arrComparisons[$strMethod],
+                $arrParams[1],
+                $boolValueIsField);
         }
         if (in_array($strMethod, array_keys(self::$_arrOperands)))
         {
-            if (count($arrParams) == 1 && is_array($arrParams[0]))
+            if (count($arrParams) == 1 
+                && is_array($arrParams[0]))
             {
                 $arrParams = $arrParams[0];
             }
-            return $this->_mergeWheres(self::$_arrOperands[$strMethod],
-                                       $arrParams);
+            return $this->_mergeWheres(
+                self::$_arrOperands[$strMethod],
+                $arrParams);
         }
         trigger_error("$strMethod is not a method.", E_USER_ERROR);
         return false;
@@ -405,7 +416,8 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     {
         $this->_boolDirty = true;
         $strWhere = '';
-        if (stristr($strField, '.')) {
+        if (stristr($strField, '.'))
+        {
             $arrField = explode('.', $strField, 2);
             $strField = $arrField[0] . '.`' . $arrField[1] . '`';
         }
@@ -414,10 +426,14 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
             $strField = '`' . $strField . '`';
         }
         $strWhere .= ' ' . $strField;
-        if (is_null($mixValue)) {
+        if (is_null($mixValue))
+        {
             if ($strComparison == '=')
+            {
                 $strWhere .= ' IS';
-            else {
+            }
+            else
+            {
                 $strWhere .= ' IS NOT';
             }
             $strWhere .= ' NULL';
