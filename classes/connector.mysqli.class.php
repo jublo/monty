@@ -175,7 +175,15 @@ class Monty_MySQLI extends Monty_Connector
                 $strHostString = $strHost;
                 break;
             case MONTY_OPEN_PERSISTENT:
-                $strHostString = 'p:' . $strHost;
+                // persistent mysqli connections only for PHP 5.3+
+                if (version_compare(phpversion(), '5.3.0', '>='))
+                {
+                    $strHostString = 'p:' . $strHost;
+                }
+                else
+                {
+                    $strHostString = $strHost;
+                }
                 break;
         }
         if (!$this->_DB = @new mysqli($strHostString, $strUser, $strPassword, $strDatabase))
