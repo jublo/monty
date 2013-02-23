@@ -173,7 +173,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
      * @param $arrFields
      * @return void
      */
-    public function fields($arrFields)
+    public function fields($arrFields = array())
     {
         if (is_array($arrFields))
         {
