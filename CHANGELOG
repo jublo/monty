@@ -1,0 +1,82 @@
+monty - changelog
+=================
+
+2.1.3100 (2013-06-22)
++ Allow to get all fields by calling $table->fields() with no parameters
+- Update copyright year
+- Convert files to LF format
+
+2.1.1613.0651 (2012-04-13)
++ Fixed: persistent mysqli connections only for PHP 5.3+.
+
+2.1.1612.2121 (2012-04-12)
++ Added: Allow boolean conditions (and, or) with conditions list as array.
+- Fixed: Return correct database-open return value.
++ Updated: Code formatting.
+
+2.1.1016.0012 (2011-12-16)
+- Fixed: IS NULL should not use the equalization operator.
+
+2.1.1015.2343 (2011-12-15)
++ Added: Basic JOIN support with 1 ON clause per JOIN.
+
+2.0.0920.2136 (2011-11-20)
+- Fixed: Only allow simple LIMIT clause on non-SELECT queries.
+
+2.0.0917.0101 (2011-11-17)
++ Added: Use Monty statically.
++ Added: Condition alias "starts".
+- Fixed: Allow access to resultset only if there are results.
++ Added: queryall shortcut for sending SQL query and getting its results in one step.
++ Added: replace shortcut for replacing.
++ Added: TRUNCATE support.
++ Added: "contains" shortcut.
++ Added: Use UTF-8 connection.
+- Fixed: mysqli::error and mysqli::errno are members, not methods.
+- Fixed: Multiple wheres did not glue into the WHERE clause.
++ Updated: Use __FILE__ in uppercase.
+
+2.0.0916.1934 (2011-11-16)
++ Added: Support for persistent connections.
+- Fixed: Allow multiple similar condition fragments in the same SQL WHERE clause.
+- Fixed: PHPDoc for Monty_MySQL class constructor.
++ Added: MySQLi support; use MySQLi connector per default.
+
+1.5.0916.1736 (2011-11-16)
++ Added: Deleting rows.
++ Added: shortcut Monty::table.
++ Added: Use easy style for updating 1 field
+- Fixed: easy field update was wrong.
++ Added: Git ignore list.
++ Updated: Use Markdown for readme.
+- Fixed: Use proper syntax highlighting for readme code block.
++ Updated: Use spaces for indenting code.
+- Fixed: Correct PHPDoc statements for connector class.
+- Fixed: Data seek needs result resource identifier as first parameter.
++ Added: Allow AND, OR statements.
++ Added: Multiple tables cross-SELECT support.
+- Removed: JOIN support.
+
+1.2.0111.1358 (2011-03-11)
++ Added: Sort results by field or random.
++ Changed: Merged all shortcuts into one __call function.
++ Added: Support for easy insert and replace.
++ Changed: Splitted _buildQuery into term functions.
++ Added: Easy support for limits and updates.
+- Fixed: Removed debug die().
++ Added: Get all rows with all().
+
+1.1.0110.2303 (2011-03-10)
++ Added First Steps section in README.
++ Moved classes to subfolder.
+
+1.1.0110.2239 (2011-03-10)
++ Improved: Moved functions around in the classes to sort them a-z.
++ Changed: More a-z sorting fixes.
++ Added: Objectified wrapper for tables.
+
+1.0.0110.2144 (2011-03-10)
++ Added: LICENSE and README
++ Edited README via GitHub
+- Fixed: First-run errors.
++ Initial version.
