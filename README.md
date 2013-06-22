@@ -1,26 +1,33 @@
-**monty is a simple database wrapper.**
+monty
+=====
+*monty is a simple database wrapper.*
 
-https://github.com/mynetx/monty
+[![Download latest version from GitHub](https://f.cloud.github.com/assets/157944/691044/404c1ca2-db59-11e2-9b0b-8f63de656f9d.png)](https://github.com/mynetx/monty/archive/master.zip)
 
----
+Copyright (C) 2011-2013 J.M. &lt;me@mynetx.net&gt;
 
-*This project is licensed under the GNU Lesser General Public License V3.
-Find more details in the LICENSE file.
-You must not redistribute the project files without README and LICENSE.*
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
----
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-System requirements
--------------------
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-To use this database wrapper, make sure the web server is running
-at least PHP 5.2, or any higher version.
+### Requirements
+
+- PHP 5.2.0 or higher
 
 
 First steps
 -----------
 
-<pre lang="php"><code>
+```php
 
 // load monty
 require 'monty/loader.php';
@@ -74,4 +81,4 @@ for($i = 0; $i < $objTable->rows(); $i++) {
 $objConnector->query('SELECT * FROM themaintable WHERE field = "value"');
 echo $objConnector->rows();
 
-</code></pre>
+```
