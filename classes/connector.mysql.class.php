@@ -28,6 +28,7 @@
  * @author mynetx
  * @copyright 2011
  * @access public
+ * @deprecated
  */
 class Monty_MySQL extends Monty_Connector
 {

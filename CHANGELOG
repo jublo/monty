@@ -1,6 +1,9 @@
 monty - changelog
 =================
 
+2.2.0 (not yet released)
+- Deprecate Monty_MySQL and Monty_MySQL_Easy classes
+
 2.1.3100 (2013-06-22)
 + Allow to get all fields by calling $table->fields() with no parameters
 - Update copyright year
