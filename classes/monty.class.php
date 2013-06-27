@@ -4,7 +4,7 @@
  * monty is a simple database wrapper.
  *
  * @package monty
- * @version 2.1.3100
+ * @version 2.2.0-dev
  * @author J.M. <me@mynetx.net>
  * @copyright 2011-2013 J.M. <me@mynetx.net>
  *
@@ -64,5 +64,14 @@ class Monty
             self::storeConnector();
         }
         return self::$_objConnector->table($strTable, $strShortcut);
+    }
+
+    public static function setReturnType($returnType)
+    {
+        if (!self::$_objConnector)
+        {
+            self::storeConnector();
+        }
+        return self::$_objConnector->setReturnType($returnType);
     }
 }

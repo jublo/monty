@@ -1,6 +1,10 @@
 monty - changelog
 =================
 
+2.2.0 (2013-06-27)
++ Set default return type for database queries
+- Deprecate Monty_MySQL and Monty_MySQL_Easy classes
+
 2.1.3100 (2013-06-23)
 + Allow to get all fields by calling $table->fields() with no parameters
 - Update copyright year

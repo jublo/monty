@@ -43,6 +43,7 @@ class Monty_MySQLI extends Monty_Connector
         $this->_intRows = 0;
         $this->_resQuery = null;
         $this->_strQuery = null;
+        $this->_intReturnType = MONTY_ALL_ARRAY;
         $this->_DB = null;
     }
 
@@ -52,7 +53,7 @@ class Monty_MySQLI extends Monty_Connector
      * @param int $intType
      * @return array $arrRows
      */
-    public function all($intType = MONTY_ALL_ARRAY)
+    public function all($intType = null)
     {
         if (!$this->_resQuery)
         {
@@ -113,11 +114,15 @@ class Monty_MySQLI extends Monty_Connector
      * @param int $intType
      * @return mixed $mixRow
      */
-    public function next($intType = MONTY_NEXT_ARRAY)
+    public function next($intType = null)
     {
         if (!$this->_resQuery)
         {
             return false;
+        }
+        if ($intType === null)
+        {
+            $intType = $this->_intReturnType;
         }
         switch ($intType)
         {
@@ -253,7 +258,18 @@ class Monty_MySQLI extends Monty_Connector
         return $this->_resQuery->data_seek($intRow);
     }
 
+    /** Monty_MySQLI::setReturnType()
+     * 
+     * @param int $intReturnType The return type to set as default
+     * @return void
+     */
+     public function setReturnType($intReturnType)
+     {
+         $this->_intReturnType = $intReturnType;
+     }
+ 
     /**
+     *
      * Monty_MySQLI::table()
      *
      * @param string $strTable
@@ -262,6 +278,8 @@ class Monty_MySQLI extends Monty_Connector
      */
     public function table($strTable, $strShortcut = null)
     {
-        return new Monty_MySQLI_Easy($strTable, $strShortcut, $this->_DB);
+        $easy = new Monty_MySQLI_Easy($strTable, $strShortcut, $this->_DB);
+        $easy->setReturnType($this->_intReturnType);
+        return $easy;
     }
 }
