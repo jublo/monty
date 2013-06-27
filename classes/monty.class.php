@@ -65,4 +65,13 @@ class Monty
         }
         return self::$_objConnector->table($strTable, $strShortcut);
     }
+
+    public static function setReturnType($returnType)
+    {
+        if (!self::$_objConnector)
+        {
+            self::storeConnector();
+        }
+        return self::$_objConnector->setReturnType($returnType);
+    }
 }

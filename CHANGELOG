@@ -2,6 +2,7 @@ monty - changelog
 =================
 
 2.2.0 (not yet released)
++ Set default return type for database queries
 
 2.1.3100 (2013-06-23)
 + Allow to get all fields by calling $table->fields() with no parameters

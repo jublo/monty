@@ -60,6 +60,7 @@ define('MONTY_QUERY_TRUNCATE', 5);
 abstract class Monty_Connector
 {
 
+    protected $_intReturnType;
     protected $_intRows;
     protected $_resQuery;
     protected $_strQuery;
@@ -85,6 +86,13 @@ abstract class Monty_Connector
      * Walk through the result set.
      */
     public abstract function next();
+
+    /**
+     * Monty_Connector::nextfield()
+     *
+     * Walk through the result set and get the next field.
+     */
+    public abstract function nextfield();
 
     /**
      * Monty_Connector::open()
@@ -121,9 +129,10 @@ abstract class Monty_Connector
     public abstract function seek($intRow);
 
     /**
-     * Monty_Connector::nextfield()
-     *
-     * Walk through the result set and get the next field.
+     * Monty_Connector::setReturnType()
+     * 
+     * Store default return type for database results
+     * @param int $intReturnType
      */
-    public abstract function nextfield();
+    public abstract function setReturnType($intReturnType);
 }
