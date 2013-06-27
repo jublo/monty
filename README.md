@@ -76,6 +76,10 @@ for($i = 0; $i < $objTable->rows(); $i++) {
 // $objRow = $objTable->next(MONTY_NEXT_OBJECT);
 // echo $objRow->field;
 
+// for setting the object return type as default, put this statement
+// at the top of your code:
+// $objTable->setReturnType(MONTY_ALL_OBJECT);
+
 
 // you can also run raw SQL like this (the nerd mode):
 $objConnector->query('SELECT * FROM themaintable WHERE field = "value"');
