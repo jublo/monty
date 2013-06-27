@@ -139,7 +139,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
      * @param int $intType
      * @return array $arrRows
      */
-    public function all($intType = MONTY_NEXT_ARRAY)
+    public function all($intType = null)
     {
         $this->_buildQuery();
         return parent::all($intType);
@@ -245,7 +245,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
      * @param int $intType
      * @return mixed $mixRow
      */
-    public function next($intType = MONTY_NEXT_ARRAY)
+    public function next($intType = null)
     {
         $this->_buildQuery();
         return parent::next($intType);
@@ -286,7 +286,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
      * @param int $intType
      * @return array
      */
-    public function queryall($strQuery, $intType = MONTY_NEXT_ARRAY)
+    public function queryall($strQuery, $intType = null)
     {
         $this->query($strQuery);
         $this->_boolDirty = false;
