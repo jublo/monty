@@ -1,6 +1,10 @@
 monty - changelog
 =================
 
+2.3.0 (2013-08-01)
++ Return existing connector if Monty::getConnector() is called with second parameter
++ Add Monty::tableExists for checking if a table name exists in the database
+
 2.2.0 (2013-06-27)
 + Set default return type for database queries
 - Deprecate Monty_MySQL and Monty_MySQL_Easy classes
