@@ -27,10 +27,16 @@ define('MONTY_CONNECTOR_MYSQLI', 2);
 
 class Monty
 {
-    protected static $_objConnector = null;
+    protected static $_objConnectors = array();
 
-    public static function getConnector($intType = MONTY_CONNECTOR_MYSQLI)
+    public static function getConnector($intType = MONTY_CONNECTOR_MYSQLI, $boolExisting = false)
     {
+        // if existing connector, look for that first
+        if ($boolExisting && isset(self::$_objConnectors[$intType]))
+        {
+            return self::$_objConnectors[$intType];
+        }
+
         switch ($intType)
         {
             case MONTY_CONNECTOR_MYSQL:
@@ -43,35 +49,35 @@ class Monty
     public static function open($strUser, $strPassword, $strDatabase,
         $strHost = 'localhost', $intOpenType = MONTY_OPEN_NORMAL)
     {
-        if (!self::$_objConnector)
+        if (!isset(self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]))
         {
             self::storeConnector();
         }
-        return self::$_objConnector->open(
+        return self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]->open(
             $strUser, $strPassword, $strDatabase,
             $strHost, $intOpenType);
     }
 
     public static function storeConnector($intType = MONTY_CONNECTOR_MYSQLI)
     {
-        self::$_objConnector = self::getConnector($intType);
+        self::$_objConnectors[$intType] = self::getConnector($intType);
     }
 
     public static function table($strTable, $strShortcut = '')
     {
-        if (!self::$_objConnector)
+        if (!isset(self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]))
         {
             self::storeConnector();
         }
-        return self::$_objConnector->table($strTable, $strShortcut);
+        return self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]->table($strTable, $strShortcut);
     }
 
     public static function setReturnType($returnType)
     {
-        if (!self::$_objConnector)
+        if (!isset(self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]))
         {
             self::storeConnector();
         }
-        return self::$_objConnector->setReturnType($returnType);
+        return self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]->setReturnType($returnType);
     }
 }
