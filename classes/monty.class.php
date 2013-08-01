@@ -31,6 +31,12 @@ class Monty
 
     public static function getConnector($intType = MONTY_CONNECTOR_MYSQLI, $boolExisting = false)
     {
+        // allow simpler default type parameter
+        if ($intType === null)
+        {
+            $intType = MONTY_CONNECTOR_MYSQLI;
+        }
+
         // if existing connector, look for that first
         if ($boolExisting && isset(self::$_objConnectors[$intType]))
         {
