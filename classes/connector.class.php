@@ -135,4 +135,20 @@ abstract class Monty_Connector
      * @param int $intReturnType
      */
     public abstract function setReturnType($intReturnType);
+
+    /**
+     * Monty_Connector::table()
+     *
+     * @param string $strTable
+     * @param string $strShortcut
+     */
+    public abstract function table($strTable, $strShortcut = null);
+
+    /**
+     * Monty_Connector::tableExists()
+     *
+     * Checks whether the given table exists
+     * @param string $strTable
+     */
+    public abstract function tableExists($strTable);
 }

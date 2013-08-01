@@ -268,4 +268,16 @@ class Monty_MySQL extends Monty_Connector
         $easy->setReturnType($this->_intReturnType);
         return $easy;
     }
+
+    /**
+     * Monty_MySQL::tableExists()
+     *
+     * @param string $strTable
+     * @return bool $boolExists
+     */
+    public function tableExists($strTable)
+    {
+        $this->query('SHOW TABLES LIKE "' . mysql_real_escape_string($strTable) . '"');
+        return $this->rows() > 0;
+    }
 }
