@@ -1,7 +1,7 @@
 monty - changelog
 =================
 
-2.3.0 (not yet released)
+2.3.0 (2013-08-01)
 + Return existing connector if Monty::getConnector() is called with second parameter
 + Add Monty::tableExists for checking if a table name exists in the database
 
