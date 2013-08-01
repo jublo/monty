@@ -85,4 +85,9 @@ for($i = 0; $i < $objTable->rows(); $i++) {
 $objConnector->query('SELECT * FROM themaintable WHERE field = "value"');
 echo $objConnector->rows();
 
+// check if a certain table exists at the moment:
+if ($objConnector->tableExists('the_table')) {
+    // do something
+}
+
 ```

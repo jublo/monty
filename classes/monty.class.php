@@ -78,6 +78,15 @@ class Monty
         return self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]->table($strTable, $strShortcut);
     }
 
+    public static function tableExists($strTable)
+    {
+        if (!isset(self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]))
+        {
+            self::storeConnector();
+        }
+        return self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]->tableExists($strTable);
+    }
+
     public static function setReturnType($returnType)
     {
         if (!isset(self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]))
