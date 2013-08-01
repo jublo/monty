@@ -1,7 +1,7 @@
 {
     "name": "mynetx/monty",
     "description" : "monty is a simple database wrapper.",
-    "version": "2.2.0",
+    "version": "2.3.0-dev",
     "autoload": {
         "classmap": ["loader.php"]
     },

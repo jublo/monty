@@ -1,6 +1,8 @@
 monty - changelog
 =================
 
+2.3.0 (not yet released)
+
 2.2.0 (2013-06-27)
 + Set default return type for database queries
 - Deprecate Monty_MySQL and Monty_MySQL_Easy classes

@@ -4,7 +4,7 @@
  * monty is a simple database wrapper.
  *
  * @package monty
- * @version 2.2.0-dev
+ * @version 2.3.0-dev
  * @author J.M. <me@mynetx.net>
  * @copyright 2011-2013 J.M. <me@mynetx.net>
  *
