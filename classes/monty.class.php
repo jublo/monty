@@ -10,7 +10,7 @@
  * @author    J.M. <me@mynetx.net>
  * @copyright 2011-2013 J.M. <me@mynetx.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
- * @version   2.3.0
+ * @version   2.3.1
  * @link      https://github.com/mynetx/monty/
  */
 
