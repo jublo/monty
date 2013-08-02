@@ -1,9 +1,12 @@
 monty - changelog
 =================
 
+2.3.1 (not yet released)
++ #3 Apply PEAR coding standards
+
 2.3.0 (2013-08-01)
-+ Return existing connector if Monty::getConnector() is called with second parameter
-+ Add Monty::tableExists for checking if a table name exists in the database
++ #1 Return existing connector if Monty::getConnector() is called with second parameter
++ #2 Add Monty::tableExists for checking if a table name exists in the database
 
 2.2.0 (2013-06-27)
 + Set default return type for database queries

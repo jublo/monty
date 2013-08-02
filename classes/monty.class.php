@@ -3,96 +3,151 @@
 /**
  * monty is a simple database wrapper.
  *
- * @package monty
- * @version 2.3.0
- * @author J.M. <me@mynetx.net>
+ * PHP version 5
+ *
+ * @category  Database
+ * @package   Monty
+ * @author    J.M. <me@mynetx.net>
  * @copyright 2011-2013 J.M. <me@mynetx.net>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
+ * @version   2.3.0
+ * @link      https://github.com/mynetx/monty/
  */
 
 define('MONTY_CONNECTOR_MYSQL', 1);
 define('MONTY_CONNECTOR_MYSQLI', 2);
 
+/**
+ * Monty
+ *
+ * @category  Database
+ * @package   Monty
+ * @author    J.M. <me@mynetx.net>
+ * @copyright 2013 J.M. <me@mynetx.net>
+ * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
+ * @link      https://github.com/mynetx/monty/
+ */
+
 class Monty
 {
-    protected static $_objConnectors = array();
+    protected static $objConnectors = array();
 
-    public static function getConnector($intType = MONTY_CONNECTOR_MYSQLI, $boolExisting = false)
-    {
+    /**
+     * Monty::getConnector()
+     * Get the database connector
+     * 
+     * @param int  $type         Connector type
+     * @param bool $boolExisting Return existing connector of requested type
+     * 
+     * @return Monty_MySQL|Monty_MySQLI
+     */
+    public static function getConnector(
+        $type = MONTY_CONNECTOR_MYSQLI,
+        $boolExisting = false
+    ) {
         // allow simpler default type parameter
-        if ($intType === null)
-        {
-            $intType = MONTY_CONNECTOR_MYSQLI;
+        if ($type === null) {
+            $type = MONTY_CONNECTOR_MYSQLI;
         }
 
         // if existing connector, look for that first
-        if ($boolExisting && isset(self::$_objConnectors[$intType]))
-        {
-            return self::$_objConnectors[$intType];
+        if ($boolExisting && isset(self::$objConnectors[$type])) {
+            return self::$objConnectors[$type];
         }
 
-        switch ($intType)
-        {
-            case MONTY_CONNECTOR_MYSQL:
-                return new Monty_MySQL;
-            case MONTY_CONNECTOR_MYSQLI:
-                return new Monty_MySQLI;
+        switch ($type) {
+        case MONTY_CONNECTOR_MYSQL:
+            return new Monty_MySQL;
+        case MONTY_CONNECTOR_MYSQLI:
+            return new Monty_MySQLI;
         }
     }
 
-    public static function open($strUser, $strPassword, $strDatabase,
-        $strHost = 'localhost', $intOpenType = MONTY_OPEN_NORMAL)
-    {
-        if (!isset(self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]))
-        {
+    /**
+     * Monty::open()
+     * 
+     * @param string $user      The database user name
+     * @param string $password  The database password
+     * @param string $database  Name of the database to connect to
+     * @param string $host      Host name of database server
+     * @param int    $open_type Whether to open a persistent connection
+     * 
+     * @return bool $boolIsOpened
+     */
+    public static function open(
+        $user,
+        $password,
+        $database,
+        $host = 'localhost',
+        $open_type = MONTY_OPEN_NORMAL
+    ) {
+        if (!isset(self::$objConnectors[MONTY_CONNECTOR_MYSQLI])) {
             self::storeConnector();
         }
-        return self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]->open(
-            $strUser, $strPassword, $strDatabase,
-            $strHost, $intOpenType);
+        return self::$objConnectors[MONTY_CONNECTOR_MYSQLI]->open(
+            $user, $password, $database,
+            $host, $open_type
+        );
     }
 
-    public static function storeConnector($intType = MONTY_CONNECTOR_MYSQLI)
+    /**
+     * Monty::storeConnector
+     * 
+     * @param int $type Whether to get MySQL or MySQLI connector
+     * 
+     * @return void
+     */
+    public static function storeConnector($type = MONTY_CONNECTOR_MYSQLI)
     {
-        self::$_objConnectors[$intType] = self::getConnector($intType);
+        self::$objConnectors[$type] = self::getConnector($type);
     }
 
-    public static function table($strTable, $strShortcut = '')
+    /**
+     * Monty::table
+     * 
+     * @param string $table_name     Database table to work with
+     * @param string $table_shortcut Optional table shortcut character
+     * 
+     * @return Monty_MySQL_Easy|Monty_MySQLI_Easy
+     */
+    public static function table($table_name, $table_shortcut = '')
     {
-        if (!isset(self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]))
-        {
+        if (!isset(self::$objConnectors[MONTY_CONNECTOR_MYSQLI])) {
             self::storeConnector();
         }
-        return self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]->table($strTable, $strShortcut);
+        return self::$objConnectors[MONTY_CONNECTOR_MYSQLI]
+            ->table($table_name, $table_shortcut);
     }
 
-    public static function tableExists($strTable)
+    /**
+     * Monty::tableExists()
+     * 
+     * @param string $table_name Table name to check for existence
+     * 
+     * @return bool $boolTableExists
+     */
+    public static function tableExists($table_name)
     {
-        if (!isset(self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]))
-        {
+        if (!isset(self::$objConnectors[MONTY_CONNECTOR_MYSQLI])) {
             self::storeConnector();
         }
-        return self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]->tableExists($strTable);
+        return self::$objConnectors[MONTY_CONNECTOR_MYSQLI]
+            ->tableExists($table_name);
     }
 
+    /**
+     * Monty::setReturnType
+     * 
+     * @param int $returnType The return type to set
+     *
+     * @return void
+     */
     public static function setReturnType($returnType)
     {
-        if (!isset(self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]))
-        {
+        if (!isset(self::$objConnectors[MONTY_CONNECTOR_MYSQLI])) {
             self::storeConnector();
         }
-        return self::$_objConnectors[MONTY_CONNECTOR_MYSQLI]->setReturnType($returnType);
+        return self::$objConnectors[MONTY_CONNECTOR_MYSQLI]
+            ->setReturnType($returnType);
     }
 }
