@@ -33,10 +33,10 @@ First steps
 require 'monty/loader.php';
 
 // get the MySQL connector
-$objConnector = Monty::getConnector();
+$connector = Monty::getConnector();
 
 // connect to a database
-$objConnector->open('youruser', 'fancypass', 'holydatabase');
+$connector->open('youruser', 'fancypass', 'holydatabase');
 
 // not running the database on localhost? add a 4th parameter like this:
 // $db->open('youruser', 'fancypass', 'holydatabase', 'pentagon.example.com');
@@ -46,47 +46,47 @@ $objConnector->open('youruser', 'fancypass', 'holydatabase');
 
 // now there's two operation modes:
 // the EASY one first
-$objTable = $objConnector->table('themaintable');
+$table = $connector->table('themaintable');
 
 // want multiple tables?
-// $objTable->add('anothertable');
+// $table->add('anothertable');
 
 // set a condition
-$objTable->where('field', '=', 'value');
+$table->where('field', '=', 'value');
 
 // there are some shortcuts, like this one:
-// $objTable->eq('field', 'value');
+// $table->eq('field', 'value');
 
 // you might also want to use ands/ors
-// $objTable->or($objTable->eq('field1', 'value1'),
-//               $objTable->like('field2', 'value2'));
+// $table->or($table->eq('field1', 'value1'),
+//               $table->like('field2', 'value2'));
 // equals:
 // ... WHERE field1 = "value1" OR field2 LIKE "value2"
 
 // peek at the generated sql code
-echo $objTable->sql() . '<br />';
+echo $table->sql() . '<br />';
 
 // loop through the results and display them
-for($i = 0; $i < $objTable->rows(); $i++) {
-    $arrRow = $objTable->next();
-    echo $arrRow['field'] . ' = ' . $arrRow['value'] . '<br />';
+for($i = 0; $i < $table->rows(); $i++) {
+    $row_array = $table->next();
+    echo $row_array['field'] . ' = ' . $row_array['value'] . '<br />';
 }
 
 // you could also have got an object instead, like this:
-// $objRow = $objTable->next(MONTY_NEXT_OBJECT);
-// echo $objRow->field;
+// $row = $table->next(MONTY_NEXT_OBJECT);
+// echo $row->field;
 
 // for setting the object return type as default, put this statement
 // at the top of your code:
-// $objTable->setReturnType(MONTY_ALL_OBJECT);
+// $table->setReturnType(MONTY_ALL_OBJECT);
 
 
 // you can also run raw SQL like this (the nerd mode):
-$objConnector->query('SELECT * FROM themaintable WHERE field = "value"');
-echo $objConnector->rows();
+$connector->query('SELECT * FROM themaintable WHERE field = "value"');
+echo $connector->rows();
 
 // check if a certain table exists at the moment:
-if ($objConnector->tableExists('the_table')) {
+if ($connector->tableExists('the_table')) {
     // do something
 }
 
