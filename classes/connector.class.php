@@ -54,20 +54,20 @@ define('MONTY_QUERY_TRUNCATE', 5);
 abstract class Monty_Connector
 {
 
-    protected $intReturnType;
-    protected $intRows;
-    protected $resQuery;
-    protected $strQuery;
+    protected $return_type;
+    protected $number_rows;
+    protected $query_handle;
+    protected $query_string;
 
     /**
      * Monty_Connector::error()
      * Get the last operation error.
      *
-     * @param int $intType Error message return type
+     * @param int $type Error message return type
      *
      * @return undefined
      */
-    public abstract function error($intType = MONTY_ERROR_STRING);
+    public abstract function error($type = MONTY_ERROR_STRING);
 
     /**
      * Monty_Connector::id()
@@ -97,29 +97,29 @@ abstract class Monty_Connector
      * Monty_Connector::open()
      * Open a database connection.
      *
-     * @param string $strUser     The database user name
-     * @param string $strPassword The database password
-     * @param string $strDatabase Name of the database to connect to
-     * @param string $strHost     Host name of database server
+     * @param string $user     The database user name
+     * @param string $password The database password
+     * @param string $database Name of the database to connect to
+     * @param string $host     Host name of database server
      *
      * @return undefined
      */
     public abstract function open(
-        $strUser,
-        $strPassword,
-        $strDatabase,
-        $strHost = 'localhost'
+        $user,
+        $password,
+        $database,
+        $host = 'localhost'
     );
 
     /**
      * Monty_Connector::query()
      * Run a raw database query.
      *
-     * @param string $strQuery The SQL query to execute
+     * @param string $query_string The SQL query to execute
      *
      * @return undefined
      */
-    public abstract function query($strQuery);
+    public abstract function query($query_string);
 
     /**
      * Monty_Connector::rows()
@@ -133,39 +133,39 @@ abstract class Monty_Connector
      * Monty_Connector::seek()
      * Seek a certain row in the result set.
      *
-     * @param int $intRow The row number to set the pointer to
+     * @param int $row_number The row number to set the pointer to
      *
      * @return undefined
      */
-    public abstract function seek($intRow);
+    public abstract function seek($row_number);
 
     /**
      * Monty_Connector::setReturnType()
      * Store default return type for database results
      *
-     * @param int $intReturnType The wanted return type
+     * @param int $return_type The wanted return type
      *
      * @return undefined
      */
-    public abstract function setReturnType($intReturnType);
+    public abstract function setReturnType($return_type);
 
     /**
      * Monty_Connector::table()
      *
-     * @param string $strTable    The name of the table to get
-     * @param string $strShortcut Optional shortcut character
+     * @param string $table_name     The name of the table to get
+     * @param string $table_shortcut Optional shortcut character
      *
      * @return undefined
      */
-    public abstract function table($strTable, $strShortcut = null);
+    public abstract function table($table_name, $table_shortcut = null);
 
     /**
      * Monty_Connector::tableExists()
      * Checks whether the given table exists
      *
-     * @param string $strTable The name of table to check for
+     * @param string $table_name The name of table to check for
      *
      * @return undefined
      */
-    public abstract function tableExists($strTable);
+    public abstract function tableExists($table_name);
 }

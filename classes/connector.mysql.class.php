@@ -33,42 +33,42 @@ class Monty_MySQL extends Monty_Connector
      */
     public function __construct()
     {
-        $this->intRows = 0;
-        $this->resQuery = null;
-        $this->strQuery = null;
-        $this->intReturnType = MONTY_ALL_ARRAY;
+        $this->number_rows = 0;
+        $this->query_handle = null;
+        $this->query_string = null;
+        $this->return_type = MONTY_ALL_ARRAY;
     }
 
     /**
      * Monty_MySQL::all()
      *
-     * @param int $intType The return type
+     * @param int $type The return type
      *
-     * @return array $arrRows
+     * @return array $rows_array
      */
-    public function all($intType = null)
+    public function all($type = null)
     {
-        if (! $this->resQuery) {
+        if (! $this->query_handle) {
             return false;
         }
-        $arrRows = array();
-        while ($arrRow = $this->next($intType)) {
-            $arrRows[] = $arrRow;
+        $rows_array = array();
+        while ($row_array = $this->next($type)) {
+            $rows_array[] = $row_array;
         }
-        return $arrRows;
+        return $rows_array;
     }
 
 
     /**
      * Monty_MySQL::error()
      *
-     * @param int $intType The return type
+     * @param int $type The return type
      *
      * @return mixed $mixError
      */
-    public function error($intType = MONTY_ERROR_STRING)
+    public function error($type = MONTY_ERROR_STRING)
     {
-        switch ($intType) {
+        switch ($type) {
         case MONTY_ERROR_STRING:
             return mysql_error();
         case MONTY_ERROR_ARRAY:
@@ -77,10 +77,10 @@ class Monty_MySQL extends Monty_Connector
                 'code' => mysql_errno()
             );
         case MONTY_ERROR_OBJECT:
-            $objError = new stdClass;
-            $objError->text = mysql_error();
-            $objError->code = mysql_errno();
-            return $objError;
+            $error_object = new stdClass;
+            $error_object->text = mysql_error();
+            $error_object->code = mysql_errno();
+            return $error_object;
         case MONTY_ERROR_NUMERIC:
             return mysql_errno();
         }
@@ -93,7 +93,7 @@ class Monty_MySQL extends Monty_Connector
      */
     public function id()
     {
-        if (! $this->strQuery) {
+        if (! $this->query_string) {
             return false;
         }
         return mysql_insert_id();
@@ -102,23 +102,23 @@ class Monty_MySQL extends Monty_Connector
     /**
      * Monty_MySQL::next()
      *
-     * @param int $intType The return type
+     * @param int $type The return type
      *
      * @return mixed $mixRow
      */
-    public function next($intType = null)
+    public function next($type = null)
     {
-        if (! $this->resQuery) {
+        if (! $this->query_handle) {
             return false;
         }
-        if ($intType === null) {
-            $intType = $this->intReturnType;
+        if ($type === null) {
+            $type = $this->return_type;
         }
-        switch ($intType) {
+        switch ($type) {
         case MONTY_NEXT_ARRAY:
-            return mysql_fetch_assoc($this->resQuery);
+            return mysql_fetch_assoc($this->query_handle);
         case MONTY_NEXT_OBJECT:
-            return mysql_fetch_object($this->resQuery);
+            return mysql_fetch_object($this->query_handle);
         }
     }
 
@@ -126,60 +126,60 @@ class Monty_MySQL extends Monty_Connector
     /**
      * Monty_MySQL::nextfield()
      *
-     * @param mixed $mixField Optional result column name/index
+     * @param mixed $field_data Optional result column name/index
      *
-     * @return mixed $mixField
+     * @return mixed $field_data
      */
-    public function nextfield($mixField = 0)
+    public function nextfield($field_data = 0)
     {
-        if (! $this->resQuery) {
+        if (! $this->query_handle) {
             return false;
         }
-        if (is_int($mixField)) {
-            if (! $arrRow = mysql_fetch_row($this->resQuery)) {
+        if (is_int($field_data)) {
+            if (! $row_array = mysql_fetch_row($this->query_handle)) {
                 return false;
             }
-            return isset($arrRow[$mixField]) ? $arrRow[$mixField] : false;
+            return isset($row_array[$field_data]) ? $row_array[$field_data] : false;
         }
-        if (is_string($mixField)) {
-            if (!$arrRow = mysql_fetch_assoc($this->resQuery)) {
+        if (is_string($field_data)) {
+            if (!$row_array = mysql_fetch_assoc($this->query_handle)) {
                 return false;
             }
-            return isset($arrRow[$mixField]) ? $arrRow[$mixField] : false;
+            return isset($row_array[$field_data]) ? $row_array[$field_data] : false;
         }
     }
 
     /**
      * Monty_MySQL::open()
      *
-     * @param string $strUser     The database user name
-     * @param string $strPassword The database password
-     * @param string $strDatabase Name of the database to connect to
-     * @param string $strHost     Host name of database server
-     * @param int    $intOpenType Whether to open a persistent connection
+     * @param string $user      The database user name
+     * @param string $password  The database password
+     * @param string $database  Name of the database to connect to
+     * @param string $host      Host name of database server
+     * @param int    $open_type Whether to open a persistent connection
      *
      * @return bool $boolIsOpened
      */
     public function open(
-        $strUser,
-        $strPassword,
-        $strDatabase,
-        $strHost = 'localhost',
-        $intOpenType = MONTY_OPEN_NORMAL
+        $user,
+        $password,
+        $database,
+        $host = 'localhost',
+        $open_type = MONTY_OPEN_NORMAL
     ) {
-        $strOpenFunction = '';
-        switch ($intOpenType) {
+        $open_function = '';
+        switch ($open_type) {
         case MONTY_OPEN_NORMAL:
-            $strOpenFunction = 'mysql_connect';
+            $open_function = 'mysql_connect';
             break;
         case MONTY_OPEN_PERSISTENT:
-            $strOpenFunction = 'mysql_pconnect';
+            $open_function = 'mysql_pconnect';
             break;
         }
-        if (! @$strOpenFunction($strHost, $strUser, $strPassword)) {
+        if (! @$open_function($host, $user, $password)) {
             return false;
         }
-        if (! @mysql_select_db($strDatabase)) {
+        if (! @mysql_select_db($database)) {
             return false;
         }
         @mysql_set_charset('utf8');
@@ -189,88 +189,88 @@ class Monty_MySQL extends Monty_Connector
     /**
      * Monty_MySQL::query()
      *
-     * @param string $strQuery The SQL query to execute
+     * @param string $query_string The SQL query to execute
      *
      * @return bool $boolHasSucceeded
      */
-    public function query($strQuery)
+    public function query($query_string)
     {
-        $this->resQuery = null;
-        $this->strQuery = $strQuery;
-        if (! $resQuery = @mysql_query($strQuery)) {
+        $this->query_handle = null;
+        $this->query_string = $query_string;
+        if (! $query_handle = @mysql_query($query_string)) {
             return false;
         }
-        $this->resQuery = $resQuery;
-        $this->intRows = @mysql_num_rows($resQuery);
+        $this->query_handle = $query_handle;
+        $this->number_rows = @mysql_num_rows($query_handle);
         return true;
     }
 
     /**
      * Monty_MySQL::rows()
      *
-     * @return int $intRows
+     * @return int $number_rows
      */
     public function rows()
     {
-        if (! $this->resQuery) {
+        if (! $this->query_handle) {
             return false;
         }
-        return $this->intRows;
+        return $this->number_rows;
     }
 
     /**
      * Monty_MySQL::seek()
      *
-     * @param int $intRow The row to set the result pointer to
+     * @param int $row_number The row to set the result pointer to
      *
      * @return bool $boolHasSucceeded
      */
-    public function seek($intRow)
+    public function seek($row_number)
     {
-        if (!$this->resQuery) {
+        if (!$this->query_handle) {
             return false;
         }
-        return mysql_data_seek($this->resQuery, $intRow);
+        return mysql_data_seek($this->query_handle, $row_number);
     }
 
     /**
      * Monty_MySQL::setReturnType()
      * 
-     * @param int $intReturnType The return type to set as default
+     * @param int $return_type The return type to set as default
      *
      * @return void
      */
-    public function setReturnType($intReturnType)
+    public function setReturnType($return_type)
     {
-        $this->intReturnType = $intReturnType;
+        $this->return_type = $return_type;
     }
 
     /**
      * Monty_MySQL::table()
      *
-     * @param string $strTable    The table name
-     * @param string $strShortcut Optional table shortcut character
+     * @param string $table_name     The table name
+     * @param string $table_shortcut Optional table shortcut character
      *
      * @return object Monty_MySQL_Easy
      */
-    public function table($strTable, $strShortcut = null)
+    public function table($table_name, $table_shortcut = null)
     {
-        $easy = new Monty_MySQL_Easy($strTable, $strShortcut);
-        $easy->setReturnType($this->intReturnType);
+        $easy = new Monty_MySQL_Easy($table_name, $table_shortcut);
+        $easy->setReturnType($this->return_type);
         return $easy;
     }
 
     /**
      * Monty_MySQL::tableExists()
      *
-     * @param string $strTable The table to check for existence
+     * @param string $table_name The table to check for existence
      *
      * @return bool $boolExists
      */
-    public function tableExists($strTable)
+    public function tableExists($table_name)
     {
         $this->query(
-            'SHOW TABLES LIKE "' . mysql_real_escape_string($strTable) . '"'
+            'SHOW TABLES LIKE "' . mysql_real_escape_string($table_name) . '"'
         );
         return $this->rows() > 0;
     }
