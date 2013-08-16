@@ -252,11 +252,13 @@ class Monty_MySQLI extends Monty_Connector
      * 
      * @param int $return_type The return type to set as default
      *
-     * @return void
+     * @return int $old_return_type
      */
     public function setReturnType($return_type)
     {
+        $old_return_type   = $this->return_type;
         $this->return_type = $return_type;
+        return $old_return_type;
     }
 
     /**
