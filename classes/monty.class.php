@@ -140,7 +140,7 @@ class Monty
      * 
      * @param int $returnType The return type to set
      *
-     * @return void
+     * @return int $old_return_type
      */
     public static function setReturnType($returnType)
     {
