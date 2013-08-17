@@ -51,30 +51,30 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function __construct($table_name, $table_shortcut = null)
     {
         parent::__construct();
-        if (! $table_shortcut) {
+        if (!$table_shortcut) {
             $table_shortcut = substr($table_name, 0, 1);
         }
-        self::$comparisons = array(
-            'eq' => '=',
-            'gt' => '>',
-            'gte' => '>=',
-            'like' => 'LIKE',
-            'lt' => '<',
-            'lte' => '<=',
-            'ne' => '!=',
+        self::$comparisons  = array(
+            'eq'     => '=',
+            'gt'     => '>',
+            'gte'    => '>=',
+            'like'   => 'LIKE',
+            'lt'     => '<',
+            'lte'    => '<=',
+            'ne'     => '!=',
             'regexp' => 'REGEXP'
         );
-        self::$operators = array(
+        self::$operators    = array(
             'and' => 'AND',
-            'or' => 'OR'
+            'or'  => 'OR'
         );
-        $this->joins = array();
-        $this->tables_list = array(array($table_name, $table_shortcut));
-        $this->wheres = array();
-        $this->is_dirty = true;
-        $this->insert_type = null;
-        $this->limit_count = null;
-        $this->limit_start = null;
+        $this->joins        = array();
+        $this->tables_list  = array(array($table_name, $table_shortcut));
+        $this->wheres       = array();
+        $this->is_dirty     = true;
+        $this->insert_type  = null;
+        $this->limit_count  = null;
+        $this->limit_start  = null;
         $this->wheres_count = 0;
     }
 
@@ -90,6 +90,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     {
         if (substr($method_name, 0, 1) === '_') {
             trigger_error("$method_name is not a public method.", E_USER_ERROR);
+
             return '';
         }
         if (in_array($method_name, array_keys(self::$comparisons))) {
@@ -97,6 +98,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
                 = isset($params[2])
                 ? $params[2]
                 : false;
+
             return $this->where(
                 $params[0],
                 self::$comparisons[$method_name],
@@ -108,12 +110,14 @@ class Monty_MySQL_Easy extends Monty_MySQL
             if (count($params) == 1 && is_array($params[0])) {
                 $params = $params[0];
             }
+
             return $this->mergeWheres(
                 self::$operators[$method_name],
                 $params
             );
         }
         trigger_error("$method_name is not a method.", E_USER_ERROR);
+
         return false;
     }
 
@@ -127,7 +131,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
      */
     public function add($table_name, $table_shortcut = null)
     {
-        $this->is_dirty = true;
+        $this->is_dirty      = true;
         $this->tables_list[] = array($table_name, $table_shortcut);
     }
 
@@ -141,6 +145,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function all($type = null)
     {
         $this->buildQuery();
+
         return parent::all($type);
     }
 
@@ -165,6 +170,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function delete()
     {
         $this->is_dirty = true;
+
         return $this->buildQuery(MONTY_QUERY_DELETE);
     }
 
@@ -195,8 +201,9 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function insert($fields_list, $type = MONTY_INSERT_NORMAL)
     {
         $this->fields_list = $fields_list;
-        $this->is_dirty = true;
+        $this->is_dirty    = true;
         $this->insert_type = $type;
+
         return $this->buildQuery(MONTY_QUERY_INSERT);
     }
 
@@ -219,11 +226,11 @@ class Monty_MySQL_Easy extends Monty_MySQL
         $on_field_right
     ) {
         $this->is_dirty = true;
-        $this->joins[] = array(
-            $table_name, 
-            $table_shortcut, 
-            $intJoinType, 
-            $on_field_left, 
+        $this->joins[]  = array(
+            $table_name,
+            $table_shortcut,
+            $intJoinType,
+            $on_field_left,
             $on_field_right
         );
     }
@@ -258,6 +265,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function next($type = null)
     {
         $this->buildQuery();
+
         return parent::next($type);
     }
 
@@ -271,6 +279,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function nextfield($field_data = 0)
     {
         $this->buildQuery();
+
         return parent::nextfield($field_data);
     }
 
@@ -283,10 +292,12 @@ class Monty_MySQL_Easy extends Monty_MySQL
      */
     public function query($query_string)
     {
-        if (! parent::query($query_string)) {
+        if (!parent::query($query_string)) {
             trigger_error($this->error(), E_USER_ERROR);
+
             return false;
         }
+
         return true;
     }
 
@@ -302,6 +313,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     {
         $this->query($query_string);
         $this->is_dirty = false;
+
         return $this->all($type);
     }
 
@@ -313,7 +325,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function rand()
     {
         $this->is_dirty = true;
-        $this->sorts = array(array(null, 1));
+        $this->sorts    = array(array(null, 1));
     }
 
     /**
@@ -336,6 +348,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function rows()
     {
         $this->buildQuery();
+
         return parent::rows();
     }
 
@@ -349,6 +362,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function seek($row_number)
     {
         $this->buildQuery();
+
         return parent::seek($row_number);
     }
 
@@ -363,7 +377,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function sort($by, $is_asc = 1)
     {
         $this->is_dirty = true;
-        $this->sorts[] = array($by, $is_asc);
+        $this->sorts[]  = array($by, $is_asc);
     }
 
     /**
@@ -376,6 +390,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function sql($type = MONTY_QUERY_SELECT)
     {
         $this->buildQuery($type);
+
         return $this->query_string;
     }
 
@@ -400,6 +415,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
     public function truncate()
     {
         $this->is_dirty = true;
+
         return $this->buildQuery(MONTY_QUERY_TRUNCATE);
     }
 
@@ -417,7 +433,8 @@ class Monty_MySQL_Easy extends Monty_MySQL
             $fields_list = array($fields_list => $value);
         }
         $this->fields_list = $fields_list;
-        $this->is_dirty = true;
+        $this->is_dirty    = true;
+
         return $this->buildQuery(MONTY_QUERY_UPDATE);
     }
 
@@ -438,10 +455,10 @@ class Monty_MySQL_Easy extends Monty_MySQL
         $value_is_field = false
     ) {
         $this->is_dirty = true;
-        $where_clause = '';
+        $where_clause   = '';
         if (stristr($field_name, '.')) {
             $field_array = explode('.', $field_name, 2);
-            $field_name = $field_array[0] . '.`' . $field_array[1] . '`';
+            $field_name  = $field_array[0] . '.`' . $field_array[1] . '`';
         } else {
             $field_name = '`' . $field_name . '`';
         }
@@ -456,7 +473,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
         } elseif ($value_is_field) {
             $field_array = explode('.', $value, 2);
             $where_clause
-                .=  ' ' . $comparison
+                .= ' ' . $comparison
                 . ' ' . $field_array[0]
                 . '.`' . $field_array[1] . '`';
         } else {
@@ -465,8 +482,9 @@ class Monty_MySQL_Easy extends Monty_MySQL
                 . ' "' . mysql_real_escape_string($value) . '"';
         }
 
-        $hash = $this->wheres_count++;
+        $hash                = $this->wheres_count++;
         $this->wheres[$hash] = $where_clause;
+
         return $hash;
     }
 
@@ -475,7 +493,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
      *
      * @param int $type The query type to generate
      *
-     * @return $boolHasSucceeded
+     * @return bool $boolHasSucceeded
      * @access protected
      */
     protected function buildQuery($type = MONTY_QUERY_SELECT)
@@ -546,6 +564,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
             break;
         }
         $this->is_dirty = false;
+
         return $this->query($query_string);
     }
 
@@ -566,7 +585,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
                 if (stristr($field_name, '.')) {
                     $field_name_array = explode('.', $field_name, 2);
                     $field_name
-                        = $field_name_array[0] . '.`'
+                                      = $field_name_array[0] . '.`'
                         . $field_name_array[1] . '`';
                 } else {
                     $field_name = '`' . $field_name . '`';
@@ -583,12 +602,12 @@ class Monty_MySQL_Easy extends Monty_MySQL
         case MONTY_QUERY_UPDATE:
         case MONTY_QUERY_DELETE:
             $field_names = ' SET';
-            $i = 0;
+            $i           = 0;
             foreach ($this->fields_list as $field_name => $value) {
                 $field_array = array($field_name, $value);
                 if (stristr($field_array[0], '.')) {
                     $field_name_array = explode('.', $field_array[0], 2);
-                    $field_name = '`' . $field_name_array[1] . '`';
+                    $field_name       = '`' . $field_name_array[1] . '`';
                 } else {
                     $field_name = '`' . $field_array[0] . '`';
                 }
@@ -608,6 +627,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
             }
             break;
         }
+
         return $field_names;
     }
 
@@ -629,6 +649,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
         if ($type != MONTY_QUERY_SELECT && $this->limit_count !== null) {
             $strLimit = ' LIMIT ' . $this->limit_count;
         }
+
         return $strLimit;
     }
 
@@ -647,7 +668,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
                 if ($sort[0] !== null) {
                     if (stristr($sort[0], '.')) {
                         $field_array = explode('.', $sort[0], 2);
-                        $field_name = $field_array[0] . '.`' . $field_array[1] . '`';
+                        $field_name  = $field_array[0] . '.`' . $field_array[1] . '`';
                     } else {
                         $field_name = '`' . $sort[0] . '`';
                     }
@@ -665,6 +686,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
                 }
             }
         }
+
         return $sorts;
     }
 
@@ -692,12 +714,13 @@ class Monty_MySQL_Easy extends Monty_MySQL
                 }
                 $joins .= ' `' . $join[0] . '` ' . $join[1];
                 $joins .= ' ON (';
-                $on_left = explode('.', $join[3]);
+                $on_left  = explode('.', $join[3]);
                 $on_right = explode('.', $join[4]);
                 $joins .= ' ' . $on_left[0] . '.`' . $on_left[1] . '`';
                 $joins .= ' = ' . $on_right[0] . '.`' . $on_right[1] . '`)';
             }
         }
+
         return $joins;
     }
 
@@ -714,6 +737,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
             $where_clauses .= ' WHERE';
             $where_clauses .= $this->wheres[$hash];
         }
+
         return $where_clauses;
     }
 
@@ -727,15 +751,16 @@ class Monty_MySQL_Easy extends Monty_MySQL
      */
     protected function mergeWheres($operator, $wheres)
     {
-        if (! count($wheres)) {
+        if (!count($wheres)) {
             return '';
         } elseif (count($wheres) == 1) {
             $wheres = array_values($wheres);
+
             return $wheres[0];
         }
 
         $where_clauses = ' (';
-        $i = 0;
+        $i             = 0;
         foreach ($wheres as $hash) {
             $where_clauses .= $this->wheres[$hash];
             unset($this->wheres[$hash]);
@@ -747,7 +772,7 @@ class Monty_MySQL_Easy extends Monty_MySQL
 
         $where_clauses .= ' )';
 
-        $hash = $this->wheres_count++;
+        $hash                = $this->wheres_count++;
         $this->wheres[$hash] = $where_clauses;
 
         return $hash;

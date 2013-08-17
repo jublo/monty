@@ -54,42 +54,34 @@ define('MONTY_QUERY_TRUNCATE', 5);
 abstract class Monty_Connector
 {
 
-    protected $return_type;
     protected $number_rows;
     protected $query_handle;
     protected $query_string;
+    protected $return_type;
 
     /**
      * Monty_Connector::error()
      * Get the last operation error.
      *
      * @param int $type Error message return type
-     *
-     * @return undefined
      */
     public abstract function error($type = MONTY_ERROR_STRING);
 
     /**
      * Monty_Connector::id()
      * Get the last inserted auto-id.
-     *
-     * @return undefined
      */
     public abstract function id();
 
     /**
      * Monty_Connector::next()
      * Walk through the result set.
-     *
-     * @return undefined
      */
     public abstract function next();
 
     /**
      * Monty_Connector::nextfield()
      * Walk through the result set and get the next field.
-     *
-     * @return undefined
      */
     public abstract function nextfield();
 
@@ -101,8 +93,6 @@ abstract class Monty_Connector
      * @param string $password The database password
      * @param string $database Name of the database to connect to
      * @param string $host     Host name of database server
-     *
-     * @return undefined
      */
     public abstract function open(
         $user,
@@ -116,16 +106,12 @@ abstract class Monty_Connector
      * Run a raw database query.
      *
      * @param string $query_string The SQL query to execute
-     *
-     * @return undefined
      */
     public abstract function query($query_string);
 
     /**
      * Monty_Connector::rows()
      * Get the number of rows in the result set.
-     *
-     * @return undefined
      */
     public abstract function rows();
 
@@ -134,8 +120,6 @@ abstract class Monty_Connector
      * Seek a certain row in the result set.
      *
      * @param int $row_number The row number to set the pointer to
-     *
-     * @return undefined
      */
     public abstract function seek($row_number);
 
@@ -144,8 +128,6 @@ abstract class Monty_Connector
      * Store default return type for database results
      *
      * @param int $return_type The wanted return type
-     *
-     * @return undefined
      */
     public abstract function setReturnType($return_type);
 
@@ -154,8 +136,6 @@ abstract class Monty_Connector
      *
      * @param string $table_name     The name of the table to get
      * @param string $table_shortcut Optional shortcut character
-     *
-     * @return undefined
      */
     public abstract function table($table_name, $table_shortcut = null);
 
@@ -164,8 +144,6 @@ abstract class Monty_Connector
      * Checks whether the given table exists
      *
      * @param string $table_name The name of table to check for
-     *
-     * @return undefined
      */
     public abstract function tableExists($table_name);
 }
