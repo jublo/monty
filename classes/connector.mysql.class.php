@@ -7,10 +7,10 @@
  *
  * @category  Database
  * @package   Monty
- * @author    J.M. <me@mynetx.net>
- * @copyright 2011-2013 J.M. <me@mynetx.net>
+ * @author    Jublo IT Solutions <support@jublo.net>
+ * @copyright 2011-2014 Jublo IT Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
- * @link      https://github.com/mynetx/monty/
+ * @link      https://github.com/jublonet/monty
  */
 
 /**
@@ -18,10 +18,10 @@
  *
  * @category   Database
  * @package    Monty
- * @author     J.M. <me@mynetx.net>
- * @copyright  2011 J.M. <me@mynetx.net>
+ * @author     Jublo IT Solutions <support@jublo.net>
+ * @copyright  2011 Jublo IT Solutions <support@jublo.net>
  * @license    http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
- * @link       https://github.com/mynetx/monty/
+ * @link       https://github.com/jublonet/monty
  * @deprecated since 2.2.0
  */
 class Monty_MySQL extends Monty_Connector
@@ -208,6 +208,18 @@ class Monty_MySQL extends Monty_Connector
         }
 
         return mysql_data_seek($this->query_handle, $row_number);
+    }
+
+    /**
+     * Monty_MySQL::setReturnType()
+     *
+     * @param int $return_type The return type to set as default
+     *
+     * @return void
+     */
+    public function setReturnType($return_type)
+    {
+        $this->return_type = $return_type;
     }
 
     /**

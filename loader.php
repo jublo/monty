@@ -7,11 +7,11 @@
  *
  * @category  Database
  * @package   Monty
- * @author    J.M. <me@mynetx.net>
- * @copyright 2011-2013 J.M. <me@mynetx.net>
+ * @author    Jublo IT Solutions <support@jublo.net>
+ * @copyright 2011-2014 Jublo IT Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @version   2.3.1
- * @link      https://github.com/mynetx/monty/
+ * @link      https://github.com/jublonet/monty
  */
 
 // load classes

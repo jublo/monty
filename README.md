@@ -2,9 +2,7 @@ monty
 =====
 *monty is a simple database wrapper.*
 
-[![Download latest version from GitHub](https://f.cloud.github.com/assets/157944/691044/404c1ca2-db59-11e2-9b0b-8f63de656f9d.png)](https://github.com/mynetx/monty/archive/master.zip)
-
-Copyright (C) 2011-2013 J.M. &lt;me@mynetx.net&gt;
+Copyright (C) 2011-2014 Jublo IT Solutions &lt;support@jublo.net&gt;
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published
