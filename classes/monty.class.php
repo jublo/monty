@@ -7,11 +7,11 @@
  *
  * @category  Database
  * @package   Monty
- * @author    J.M. <me@mynetx.net>
- * @copyright 2011-2013 J.M. <me@mynetx.net>
+ * @author    Jublo IT Solutions <support@jublo.net>
+ * @copyright 2011-2014 Jublo IT Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @version   2.3.1
- * @link      https://github.com/mynetx/monty/
+ * @link      https://github.com/jublonet/monty
  */
 
 define('MONTY_CONNECTOR_MYSQL', 1);
@@ -22,10 +22,10 @@ define('MONTY_CONNECTOR_MYSQLI', 2);
  *
  * @category  Database
  * @package   Monty
- * @author    J.M. <me@mynetx.net>
- * @copyright 2013 J.M. <me@mynetx.net>
+ * @author    Jublo IT Solutions <support@jublo.net>
+ * @copyright 2013 Jublo IT Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
- * @link      https://github.com/mynetx/monty/
+ * @link      https://github.com/jublonet/monty
  */
 
 class Monty
@@ -35,10 +35,10 @@ class Monty
     /**
      * Monty::getConnector()
      * Get the database connector
-     * 
+     *
      * @param int  $type         Connector type
      * @param bool $boolExisting Return existing connector of requested type
-     * 
+     *
      * @return Monty_MySQL|Monty_MySQLI
      */
     public static function getConnector(
@@ -65,13 +65,13 @@ class Monty
 
     /**
      * Monty::open()
-     * 
+     *
      * @param string $user      The database user name
      * @param string $password  The database password
      * @param string $database  Name of the database to connect to
      * @param string $host      Host name of database server
      * @param int    $open_type Whether to open a persistent connection
-     * 
+     *
      * @return bool $boolIsOpened
      */
     public static function open(
@@ -92,9 +92,9 @@ class Monty
 
     /**
      * Monty::storeConnector
-     * 
+     *
      * @param int $type Whether to get MySQL or MySQLI connector
-     * 
+     *
      * @return void
      */
     public static function storeConnector($type = MONTY_CONNECTOR_MYSQLI)
@@ -104,10 +104,10 @@ class Monty
 
     /**
      * Monty::table
-     * 
+     *
      * @param string $table_name     Database table to work with
      * @param string $table_shortcut Optional table shortcut character
-     * 
+     *
      * @return Monty_MySQL_Easy|Monty_MySQLI_Easy
      */
     public static function table($table_name, $table_shortcut = '')
@@ -121,9 +121,9 @@ class Monty
 
     /**
      * Monty::tableExists()
-     * 
+     *
      * @param string $table_name Table name to check for existence
-     * 
+     *
      * @return bool $boolTableExists
      */
     public static function tableExists($table_name)
@@ -137,7 +137,7 @@ class Monty
 
     /**
      * Monty::setReturnType
-     * 
+     *
      * @param int $returnType The return type to set
      *
      * @return void

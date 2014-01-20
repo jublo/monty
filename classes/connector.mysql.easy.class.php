@@ -7,10 +7,10 @@
  *
  * @category  Database
  * @package   Monty
- * @author    J.M. <me@mynetx.net>
- * @copyright 2011-2013 J.M. <me@mynetx.net>
+ * @author    Jublo IT Solutions <support@jublo.net>
+ * @copyright 2011-2014 Jublo IT Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
- * @link      https://github.com/mynetx/monty/
+ * @link      https://github.com/jublonet/monty
  */
 
 /**
@@ -18,10 +18,10 @@
  *
  * @category   Database
  * @package    Monty
- * @author     J.M. <me@mynetx.net>
- * @copyright  2011 J.M. <me@mynetx.net>
+ * @author     Jublo IT Solutions <support@jublo.net>
+ * @copyright  2011 Jublo IT Solutions <support@jublo.net>
  * @license    http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
- * @link       https://github.com/mynetx/monty/
+ * @link       https://github.com/jublonet/monty
  * @deprecated since 2.2.0
  */
 class Monty_MySQL_Easy extends Monty_MySQL
@@ -220,10 +220,10 @@ class Monty_MySQL_Easy extends Monty_MySQL
     ) {
         $this->is_dirty = true;
         $this->joins[] = array(
-            $table_name, 
-            $table_shortcut, 
-            $intJoinType, 
-            $on_field_left, 
+            $table_name,
+            $table_shortcut,
+            $intJoinType,
+            $on_field_left,
             $on_field_right
         );
     }
