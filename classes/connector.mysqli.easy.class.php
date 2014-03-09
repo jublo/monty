@@ -624,8 +624,6 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     public function queryall($query_string, $type = null)
     {
         $this->query($query_string);
-        $this->is_dirty = false;
-
         return $this->all($type);
     }
 
