@@ -239,21 +239,6 @@ class Monty_MySQL extends Monty_Connector
     }
 
     /**
-     * Monty_MySQL::setReturnType()
-     *
-     * @param int $return_type The return type to set as default
-     *
-     * @return int $old_return_type
-     */
-    public function setReturnType($return_type)
-    {
-        $old_return_type   = $this->return_type;
-        $this->return_type = $return_type;
-
-        return $old_return_type;
-    }
-
-    /**
      * Monty_MySQL::tableExists()
      *
      * @param string $table_name The table to check for existence
