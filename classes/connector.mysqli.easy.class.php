@@ -511,6 +511,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
      */
     public function query($query_string)
     {
+        $this->is_dirty = false;
         if (!parent::query($query_string)) {
             trigger_error($this->error(), E_USER_ERROR);
 
