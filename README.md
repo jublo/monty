@@ -1,8 +1,8 @@
 monty
 =====
-*monty is a simple database wrapper.*
+*A simple MySQL/MariaDB database wrapper in PHP.*
 
-Copyright (C) 2011-2014 Jublo IT Solutions &lt;support@jublo.net&gt;
+Copyright (C) 2011-2014 Jublo Solutions <support@jublo.net>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published
