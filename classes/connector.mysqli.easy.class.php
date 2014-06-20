@@ -259,7 +259,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
      */
     protected function buildQuery($type = MONTY_QUERY_SELECT)
     {
-        if (!$this->is_dirty) {
+        if (!$this->is_dirty && $type === MONTY_QUERY_SELECT) {
             return false;
         }
         $query_string = '';
@@ -530,6 +530,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
      */
     public function fields($fields_list = array())
     {
+        $this->is_dirty = true;
         if (is_array($fields_list)) {
             $this->fields_list = $fields_list;
         } else {
