@@ -3,6 +3,7 @@ monty - changelog
 
 2.3.2 (not yet released)
 + #4 Return old values for setter functions
+- #10 Only respect dirty flags for selects
 
 2.3.1 (2013-08-02)
 + #3 Apply PEAR coding standards
