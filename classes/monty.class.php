@@ -1,16 +1,13 @@
 <?php
 
 /**
- * monty is a simple database wrapper.
+ * A simple MySQL/MariaDB database wrapper in PHP.
  *
- * PHP version 5
- *
- * @category  Database
  * @package   Monty
+ * @version   2.4.0-dev
  * @author    Jublo Solutions <support@jublo.net>
  * @copyright 2011-2014 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
- * @version   2.4.0-dev
  * @link      https://github.com/jublonet/monty
  */
 
@@ -20,10 +17,9 @@ define('MONTY_CONNECTOR_MYSQLI', 2);
 /**
  * Monty
  *
- * @category  Database
  * @package   Monty
  * @author    Jublo Solutions <support@jublo.net>
- * @copyright 2013 Jublo Solutions <support@jublo.net>
+ * @copyright 2011-2014 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link      https://github.com/jublonet/monty
  */

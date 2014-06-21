@@ -1,11 +1,8 @@
 <?php
 
 /**
- * monty is a simple database wrapper.
+ * A simple MySQL/MariaDB database wrapper in PHP.
  *
- * PHP version 5
- *
- * @category  Database
  * @package   Monty
  * @author    Jublo Solutions <support@jublo.net>
  * @copyright 2011-2014 Jublo Solutions <support@jublo.net>
@@ -16,7 +13,6 @@
 /**
  * Monty_MySQL_Easy
  *
- * @category   Database
  * @package    Monty
  * @author     Jublo Solutions <support@jublo.net>
  * @copyright  2011 Jublo Solutions <support@jublo.net>
