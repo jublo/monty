@@ -10,7 +10,7 @@
  * @author    Jublo Solutions <support@jublo.net>
  * @copyright 2011-2014 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
- * @version   2.3.2
+ * @version   2.4.0-dev
  * @link      https://github.com/jublonet/monty
  */
 

@@ -1,7 +1,7 @@
 {
     "name": "jublonet/monty",
     "description": "monty is a simple database wrapper.",
-    "version": "2.3.2",
+    "version": "2.4.0-dev",
     "autoload": {
         "classmap": ["loader.php"]
     },
