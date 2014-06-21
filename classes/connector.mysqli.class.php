@@ -7,8 +7,8 @@
  *
  * @category  Database
  * @package   Monty
- * @author    Jublo IT Solutions <support@jublo.net>
- * @copyright 2011-2014 Jublo IT Solutions <support@jublo.net>
+ * @author    Jublo Solutions <support@jublo.net>
+ * @copyright 2011-2014 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link      https://github.com/jublonet/monty
  */
@@ -18,8 +18,8 @@
  *
  * @category  Database
  * @package   Monty
- * @author    Jublo IT Solutions <support@jublo.net>
- * @copyright 2011 Jublo IT Solutions <support@jublo.net>
+ * @author    Jublo Solutions <support@jublo.net>
+ * @copyright 2011 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link      https://github.com/jublonet/monty
  */
@@ -34,11 +34,11 @@ class Monty_MySQLI extends Monty_Connector
      */
     public function __construct()
     {
-        $this->number_rows = 0;
+        $this->number_rows  = 0;
         $this->query_handle = null;
         $this->query_string = null;
-        $this->return_type = MONTY_ALL_ARRAY;
-        $this->DB = null;
+        $this->return_type  = MONTY_ALL_ARRAY;
+        $this->DB           = null;
     }
 
     /**
@@ -50,16 +50,41 @@ class Monty_MySQLI extends Monty_Connector
      */
     public function all($type = null)
     {
-        if (! $this->query_handle) {
+        if (!$this->query_handle) {
             return false;
         }
         $rows_array = array();
         while ($row_array = $this->next($type)) {
             $rows_array[] = $row_array;
         }
+
         return $rows_array;
     }
 
+    /**
+     * Monty_MySQLI::next()
+     *
+     * @param int $type The return type
+     *
+     * @return mixed $mixRow
+     */
+    public function next($type = null)
+    {
+        if (!$this->query_handle) {
+            return false;
+        }
+        if ($type === null) {
+            $type = $this->return_type;
+        }
+        switch ($type) {
+        case MONTY_NEXT_ARRAY:
+            return $this->query_handle->fetch_assoc();
+        case MONTY_NEXT_OBJECT:
+            return $this->query_handle->fetch_object();
+        }
+
+        return $this->query_handle->fetch_assoc();
+    }
 
     /**
      * Monty_MySQLI::error()
@@ -79,13 +104,16 @@ class Monty_MySQLI extends Monty_Connector
                 'code' => $this->DB->errno
             );
         case MONTY_ERROR_OBJECT:
-            $error_object = new stdClass;
+            $error_object       = new stdClass;
             $error_object->text = $this->DB->error;
             $error_object->code = $this->DB->errno;
+
             return $error_object;
         case MONTY_ERROR_NUMERIC:
             return $this->DB->errno;
         }
+
+        return $this->DB->error;
     }
 
     /**
@@ -95,35 +123,12 @@ class Monty_MySQLI extends Monty_Connector
      */
     public function id()
     {
-        if (! $this->query_string) {
+        if (!$this->query_string) {
             return false;
         }
+
         return $this->DB->insert_id;
     }
-
-    /**
-     * Monty_MySQLI::next()
-     *
-     * @param int $type The return type
-     *
-     * @return mixed $mixRow
-     */
-    public function next($type = null)
-    {
-        if (! $this->query_handle) {
-            return false;
-        }
-        if ($type === null) {
-            $type = $this->return_type;
-        }
-        switch ($type) {
-        case MONTY_NEXT_ARRAY:
-            return $this->query_handle->fetch_assoc();
-        case MONTY_NEXT_OBJECT:
-            return $this->query_handle->fetch_object();
-        }
-    }
-
 
     /**
      * Monty_MySQLI::nextfield()
@@ -134,21 +139,25 @@ class Monty_MySQLI extends Monty_Connector
      */
     public function nextfield($field_data = 0)
     {
-        if (! $this->query_handle) {
+        if (!$this->query_handle) {
             return false;
         }
         if (is_int($field_data)) {
-            if (! $row_array = $this->query_handle->fetch_row()) {
+            if (!$row_array = $this->query_handle->fetch_row()) {
                 return false;
             }
+
             return isset($row_array[$field_data]) ? $row_array[$field_data] : false;
         }
         if (is_string($field_data)) {
-            if (! $row_array = $this->query_handle->fetch_assoc()) {
+            if (!$row_array = $this->query_handle->fetch_assoc()) {
                 return false;
             }
+
             return isset($row_array[$field_data]) ? $row_array[$field_data] : false;
         }
+
+        return false;
     }
 
     /**
@@ -188,49 +197,16 @@ class Monty_MySQLI extends Monty_Connector
             $user,
             $password,
             $database
-        )) {
+        )
+        ) {
             return false;
         }
         if ($this->DB->connect_error) {
             return false;
         }
         $this->DB->set_charset('utf8');
-        return true;
-    }
 
-    /**
-     * Monty_MySQLI::query()
-     *
-     * @param string $query_string The query to execute
-     *
-     * @return bool $boolHasSucceeded
-     */
-    public function query($query_string)
-    {
-        $this->query_handle = null;
-        $this->query_string = $query_string;
-        if (! $query_handle = @$this->DB->query($query_string)) {
-            return false;
-        }
-        if ($query_handle === true) {
-            return true;
-        }
-        $this->query_handle = $query_handle;
-        $this->number_rows = $query_handle->num_rows;
         return true;
-    }
-
-    /**
-     * Monty_MySQLI::rows()
-     *
-     * @return int $number_rows
-     */
-    public function rows()
-    {
-        if (! $this->query_handle) {
-            return false;
-        }
-        return $this->number_rows;
     }
 
     /**
@@ -242,9 +218,10 @@ class Monty_MySQLI extends Monty_Connector
      */
     public function seek($row_number)
     {
-        if (! $this->query_handle) {
+        if (!$this->query_handle) {
             return false;
         }
+
         return $this->query_handle->data_seek($row_number);
     }
 
@@ -271,6 +248,7 @@ class Monty_MySQLI extends Monty_Connector
     {
         $easy = new Monty_MySQLI_Easy($table_name, $table_shortcut, $this->DB);
         $easy->setReturnType($this->return_type);
+
         return $easy;
     }
 
@@ -286,6 +264,44 @@ class Monty_MySQLI extends Monty_Connector
         $this->query(
             'SHOW TABLES LIKE "' . $this->DB->real_escape_string($table_name) . '"'
         );
+
         return $this->rows() > 0;
+    }
+
+    /**
+     * Monty_MySQLI::query()
+     *
+     * @param string $query_string The query to execute
+     *
+     * @return bool $boolHasSucceeded
+     */
+    public function query($query_string)
+    {
+        $this->query_handle = null;
+        $this->query_string = $query_string;
+        if (!$query_handle = @$this->DB->query($query_string)) {
+            return false;
+        }
+        if ($query_handle === true) {
+            return true;
+        }
+        $this->query_handle = $query_handle;
+        $this->number_rows  = $query_handle->num_rows;
+
+        return true;
+    }
+
+    /**
+     * Monty_MySQLI::rows()
+     *
+     * @return int $number_rows
+     */
+    public function rows()
+    {
+        if (!$this->query_handle) {
+            return false;
+        }
+
+        return $this->number_rows;
     }
 }

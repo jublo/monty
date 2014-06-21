@@ -7,10 +7,10 @@
  *
  * @category  Database
  * @package   Monty
- * @author    Jublo IT Solutions <support@jublo.net>
- * @copyright 2011-2014 Jublo IT Solutions <support@jublo.net>
+ * @author    Jublo Solutions <support@jublo.net>
+ * @copyright 2011-2014 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
- * @version   2.3.1
+ * @version   2.3.2
  * @link      https://github.com/jublonet/monty
  */
 
@@ -22,8 +22,8 @@ define('MONTY_CONNECTOR_MYSQLI', 2);
  *
  * @category  Database
  * @package   Monty
- * @author    Jublo IT Solutions <support@jublo.net>
- * @copyright 2013 Jublo IT Solutions <support@jublo.net>
+ * @author    Jublo Solutions <support@jublo.net>
+ * @copyright 2013 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link      https://github.com/jublonet/monty
  */
@@ -58,9 +58,9 @@ class Monty
         switch ($type) {
         case MONTY_CONNECTOR_MYSQL:
             return new Monty_MySQL;
-        case MONTY_CONNECTOR_MYSQLI:
-            return new Monty_MySQLI;
         }
+
+        return new Monty_MySQLI;
     }
 
     /**
@@ -84,6 +84,7 @@ class Monty
         if (!isset(self::$objConnectors[MONTY_CONNECTOR_MYSQLI])) {
             self::storeConnector();
         }
+
         return self::$objConnectors[MONTY_CONNECTOR_MYSQLI]->open(
             $user, $password, $database,
             $host, $open_type
@@ -103,18 +104,36 @@ class Monty
     }
 
     /**
+     * Monty::setReturnType
+     *
+     * @param int $returnType The return type to set
+     *
+     * @return int $old_return_type
+     */
+    public static function setReturnType($returnType)
+    {
+        if (!isset(self::$objConnectors[MONTY_CONNECTOR_MYSQLI])) {
+            self::storeConnector();
+        }
+
+        return self::$objConnectors[MONTY_CONNECTOR_MYSQLI]
+            ->setReturnType($returnType);
+    }
+
+    /**
      * Monty::table
      *
      * @param string $table_name     Database table to work with
      * @param string $table_shortcut Optional table shortcut character
      *
-     * @return Monty_MySQL_Easy|Monty_MySQLI_Easy
+     * @return Monty_MySQL_Easy | Monty_MySQLI_Easy
      */
     public static function table($table_name, $table_shortcut = '')
     {
         if (!isset(self::$objConnectors[MONTY_CONNECTOR_MYSQLI])) {
             self::storeConnector();
         }
+
         return self::$objConnectors[MONTY_CONNECTOR_MYSQLI]
             ->table($table_name, $table_shortcut);
     }
@@ -131,23 +150,8 @@ class Monty
         if (!isset(self::$objConnectors[MONTY_CONNECTOR_MYSQLI])) {
             self::storeConnector();
         }
+
         return self::$objConnectors[MONTY_CONNECTOR_MYSQLI]
             ->tableExists($table_name);
-    }
-
-    /**
-     * Monty::setReturnType
-     *
-     * @param int $returnType The return type to set
-     *
-     * @return void
-     */
-    public static function setReturnType($returnType)
-    {
-        if (!isset(self::$objConnectors[MONTY_CONNECTOR_MYSQLI])) {
-            self::storeConnector();
-        }
-        return self::$objConnectors[MONTY_CONNECTOR_MYSQLI]
-            ->setReturnType($returnType);
     }
 }
