@@ -7,8 +7,8 @@
  *
  * @category  Database
  * @package   Monty
- * @author    Jublo IT Solutions <support@jublo.net>
- * @copyright 2011-2014 Jublo IT Solutions <support@jublo.net>
+ * @author    Jublo Solutions <support@jublo.net>
+ * @copyright 2011-2014 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link      https://github.com/jublonet/monty
  */
@@ -18,8 +18,8 @@
  *
  * @category   Database
  * @package    Monty
- * @author     Jublo IT Solutions <support@jublo.net>
- * @copyright  2011 Jublo IT Solutions <support@jublo.net>
+ * @author     Jublo Solutions <support@jublo.net>
+ * @copyright  2011 Jublo Solutions <support@jublo.net>
  * @license    http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link       https://github.com/jublonet/monty
  * @deprecated since 2.2.0
