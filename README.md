@@ -39,8 +39,17 @@ $connector->open('youruser', 'fancypass', 'holydatabase');
 // not running the database on localhost? add a 4th parameter like this:
 // $db->open('youruser', 'fancypass', 'holydatabase', 'pentagon.example.com');
 
-// want persistent connection? add a 5th parameter like this:
-// $db->open('youruser', 'fancypass', 'holydatabase', 'pentagon.example.com', MONTY_OPEN_PERSISTENT);
+// need a custom port number? add a 5th parameter like this:
+// $db->open(
+//     'youruser', 'fancypass', 'holydatabase',
+//     'pentagon.example.com', 3307
+// );
+
+// want a persistent connection? add a 6th parameter like this:
+// $db->open(
+//     'youruser', 'fancypass', 'holydatabase',
+//     'pentagon.example.com', 3307, MONTY_OPEN_PERSISTENT
+// );
 
 // now there's two operation modes:
 // the EASY one first

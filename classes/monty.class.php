@@ -66,8 +66,9 @@ class Monty
      * @param string $user      The database user name
      * @param string $password  The database password
      * @param string $database  Name of the database to connect to
-     * @param string $host      Host name of database server
-     * @param int    $open_type Whether to open a persistent connection
+     * @param string $host      optional, Host name of database server
+     * @param int    $port      optional, Custom port number
+     * @param int    $open_type optional, Whether to open a persistent connection
      *
      * @return bool $boolIsOpened
      */
@@ -76,6 +77,7 @@ class Monty
         $password,
         $database,
         $host = 'localhost',
+        $port = 3306,
         $open_type = MONTY_OPEN_NORMAL
     ) {
         if (!isset(self::$objConnectors[MONTY_CONNECTOR_MYSQLI])) {
@@ -84,7 +86,7 @@ class Monty
 
         return self::$objConnectors[MONTY_CONNECTOR_MYSQLI]->open(
             $user, $password, $database,
-            $host, $open_type
+            $host, $port, $open_type
         );
     }
 
