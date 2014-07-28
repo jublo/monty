@@ -11,7 +11,6 @@
  * @link      https://github.com/jublonet/monty
  */
 
-define('MONTY_CONNECTOR_MYSQL', 1);
 define('MONTY_CONNECTOR_MYSQLI', 2);
 
 /**
@@ -51,10 +50,12 @@ class Monty
             return self::$objConnectors[$type];
         }
 
+        /*
         switch ($type) {
-        case MONTY_CONNECTOR_MYSQL:
-            return new Monty_MySQL;
+            case MONTY_CONNECTOR_MYSQL:
+                return new Monty_MySQL;
         }
+        */
 
         return new Monty_MySQLI;
     }
