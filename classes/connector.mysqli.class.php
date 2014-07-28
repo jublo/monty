@@ -162,8 +162,9 @@ class Monty_MySQLI extends Monty_Connector
      * @param string $user      The database user name
      * @param string $password  The database password
      * @param string $database  Name of the database to connect to
-     * @param string $host      Host name of database server
-     * @param int    $open_type Whether to open a persistent connection
+     * @param string $host      optional, Host name of database server
+     * @param int    $port      optional, Custom port number
+     * @param int    $open_type optional, Whether to open a persistent connection
      *
      * @return bool $boolIsOpened
      */
@@ -172,6 +173,7 @@ class Monty_MySQLI extends Monty_Connector
         $password,
         $database,
         $host = 'localhost',
+        $port = 3306,
         $open_type = MONTY_OPEN_NORMAL
     ) {
         $host_connectionstring = '';
@@ -192,7 +194,8 @@ class Monty_MySQLI extends Monty_Connector
             $host_connectionstring,
             $user,
             $password,
-            $database
+            $database,
+            $port
         )
         ) {
             return false;
