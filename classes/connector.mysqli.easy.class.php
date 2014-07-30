@@ -39,6 +39,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     protected $joins;
     protected $limit_count;
     protected $limit_start;
+    protected $select_type;
     protected $sorts;
     protected $tables_list;
     protected $wheres;
@@ -273,6 +274,9 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
         switch ($type) {
         case MONTY_QUERY_SELECT:
             $query_string = 'SELECT ';
+            if ($this->select_type === MONTY_SELECT_DISTINCT) {
+                $query_string .= 'DISTINCT ';
+            }
             if (count($this->fields_list)) {
                 $query_string .= $this->buildQueryFields($type);
             } else {
@@ -707,6 +711,18 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
         $this->query();
 
         return parent::rows();
+    }
+
+    /**
+     * Monty_MySQLI_Easy::select()
+     *
+     * @param int $select_type SELECT type, e.g. MONTY_SELECT_DISTINCT
+     *
+     * @return void
+     */
+    public function select($select_type = MONTY_SELECT_NORMAL)
+    {
+        $this->select_type = $select_type;
     }
 
     /**

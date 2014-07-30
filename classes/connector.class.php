@@ -38,6 +38,9 @@ define('MONTY_QUERY_UPDATE', 3);
 define('MONTY_QUERY_DELETE', 4);
 define('MONTY_QUERY_TRUNCATE', 5);
 
+define('MONTY_SELECT_NORMAL', 1);
+define('MONTY_SELECT_DISTINCT', 2);
+
 /**
  * Monty_Connector
  *

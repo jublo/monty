@@ -64,6 +64,9 @@ $table->where('field', '=', 'value');
 // there are some shortcuts, like this one:
 // $table->eq('field', 'value');
 
+// switching to DISTINCT results is possible, too:
+// $table->select(MONTY_SELECT_DISTINCT);
+
 // you might also want to use ands/ors
 // $table->or($table->eq('field1', 'value1'),
 //               $table->like('field2', 'value2'));
