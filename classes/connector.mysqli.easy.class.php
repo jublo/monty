@@ -250,8 +250,9 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     public function delete()
     {
         $this->is_dirty = true;
+        $this->buildQuery(MONTY_QUERY_DELETE);
 
-        return $this->buildQuery(MONTY_QUERY_DELETE);
+        return $this->query();
     }
 
     /**
@@ -331,8 +332,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
             break;
         }
         $this->is_dirty = false;
-
-        return $this->query($query_string);
+        $this->query_string = $query_string;
     }
 
     /**
@@ -511,13 +511,16 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     /**
      * Monty_MySQLI_Easy::query()
      *
-     * @param string $query_string The SQL query to execute
+     * @param string $query_string optional The SQL query to execute
      *
      * @return bool $boolHasSucceeded
      */
-    public function query($query_string)
+    public function query($query_string = null)
     {
         $this->is_dirty = false;
+        if ($query_string === null) {
+            $query_string = $this->query_string;
+        }
         if (!parent::query($query_string)) {
             trigger_error($this->error(), E_USER_ERROR);
 
@@ -602,6 +605,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     public function next($type = null)
     {
         $this->buildQuery();
+        $this->query();
 
         return parent::next($type);
     }
@@ -616,6 +620,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     public function nextfield($field_data = 0)
     {
         $this->buildQuery();
+        $this->query();
 
         return parent::nextfield($field_data);
     }
@@ -631,6 +636,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     public function queryall($query_string, $type = null)
     {
         $this->query($query_string);
+
         return $this->all($type);
     }
 
@@ -644,6 +650,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     public function all($type = null)
     {
         $this->buildQuery();
+        $this->query();
 
         return parent::all($type);
     }
@@ -685,7 +692,8 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
         $this->is_dirty    = true;
         $this->insert_type = $type;
 
-        return $this->buildQuery(MONTY_QUERY_INSERT);
+        $this->buildQuery(MONTY_QUERY_INSERT);
+        return $this->query();
     }
 
     /**
@@ -696,6 +704,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     public function rows()
     {
         $this->buildQuery();
+        $this->query();
 
         return parent::rows();
     }
@@ -710,6 +719,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     public function seek($row_number)
     {
         $this->buildQuery();
+        $this->query();
 
         return parent::seek($row_number);
     }
@@ -731,12 +741,16 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     /**
      * Monty_MySQLI_Easy::sql()
      *
-     * @param int $type The query type
+     * @param int $type        optional The query type
+     * @param int $insert_type optional INSERT type
      *
      * @return string $query_string
      */
-    public function sql($type = MONTY_QUERY_SELECT)
+    public function sql($type = MONTY_QUERY_SELECT, $insert_type = MONTY_INSERT_NORMAL)
     {
+        if ($type === MONTY_QUERY_INSERT) {
+            $this->insert_type = $insert_type;
+        }
         $this->buildQuery($type);
 
         return $this->query_string;
@@ -764,7 +778,8 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     {
         $this->is_dirty = true;
 
-        return $this->buildQuery(MONTY_QUERY_TRUNCATE);
+        $this->buildQuery(MONTY_QUERY_TRUNCATE);
+        return $this->query();
     }
 
     /**
@@ -783,6 +798,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
         $this->fields_list = $fields_list;
         $this->is_dirty    = true;
 
-        return $this->buildQuery(MONTY_QUERY_UPDATE);
+        $this->buildQuery(MONTY_QUERY_UPDATE);
+        return $this->query();
     }
 }

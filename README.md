@@ -70,7 +70,7 @@ $table->where('field', '=', 'value');
 // equals:
 // ... WHERE field1 = "value1" OR field2 LIKE "value2"
 
-// peek at the generated sql code
+// peek at the generated sql code without executing it
 echo $table->sql() . '<br />';
 
 // loop through the results and display them
