@@ -18,6 +18,16 @@
  * @copyright 2011 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link      https://github.com/jublonet/monty
+ * @method    string eq(string $field_name, mixed $value) equal shortcut for where()
+ * @method    string gt(string $field_name, mixed $value) greater-than shortcut for where()
+ * @method    string gte(string $field_name, mixed $value) greater-than-or-equal shortcut for where()
+ * @method    string like(string $field_name, mixed $value) LIKE shortcut for where()
+ * @method    string lt(string $field_name, mixed $value) smaller-than shortcut for where()
+ * @method    string lte(string $field_name, mixed $value) smaller-than-or-equal shortcut for where()
+ * @method    string ne(string $field_name, mixed $value) not-equal shortcut for where()
+ * @method    string regexp(string $field_name, mixed $value) REGEXP shortcut for where()
+ * @method    string and(..array $wheres) AND shortcut for mergeWheres()
+ * @method    string or(..array $wheres) OR shortcut for mergeWheres()
  */
 class Monty_MySQLI_Easy extends Monty_MySQLI
 {
