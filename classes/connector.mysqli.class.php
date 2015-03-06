@@ -5,7 +5,7 @@
  *
  * @package   Monty
  * @author    Jublo Solutions <support@jublo.net>
- * @copyright 2011-2014 Jublo Solutions <support@jublo.net>
+ * @copyright 2011-2015 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link      https://github.com/jublonet/monty
  */
@@ -15,7 +15,7 @@
  *
  * @package   Monty
  * @author    Jublo Solutions <support@jublo.net>
- * @copyright 2011 Jublo Solutions <support@jublo.net>
+ * @copyright 2011-2015 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link      https://github.com/jublonet/monty
  */
@@ -34,6 +34,7 @@ class Monty_MySQLI extends Monty_Connector
         $this->query_handle = null;
         $this->query_string = null;
         $this->return_type  = MONTY_ALL_ARRAY;
+        $this->timeout      = 60;
         $this->DB           = null;
     }
 
@@ -190,7 +191,13 @@ class Monty_MySQLI extends Monty_Connector
             }
             break;
         }
-        if (!$this->DB = @new mysqli(
+        if (!$this->DB = @mysqli_init()) {
+            return false;
+        }
+        if (!$this->DB->options(MYSQLI_OPT_CONNECT_TIMEOUT, $this->timeout)) {
+            return false;
+        }
+        if (!$this->DB->real_connect(
             $host_connectionstring,
             $user,
             $password,
@@ -233,6 +240,17 @@ class Monty_MySQLI extends Monty_Connector
     public function setReturnType($return_type)
     {
         $this->return_type = $return_type;
+    }
+
+    /**
+     * Monty_MySQLI::setTimeout()
+     * Store default timeout for database connections
+     *
+     * @param int $timeout The wanted connection timeout in seconds
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
     }
 
     /**

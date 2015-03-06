@@ -5,7 +5,7 @@
  *
  * @package   Monty
  * @author    Jublo Solutions <support@jublo.net>
- * @copyright 2011-2014 Jublo Solutions <support@jublo.net>
+ * @copyright 2011-2015 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link      https://github.com/jublonet/monty
  */
@@ -47,7 +47,7 @@ define('MONTY_SELECT_DISTINCT', 2);
  * @category  Database
  * @package   Monty
  * @author    Jublo Solutions <support@jublo.net>
- * @copyright 2011 Jublo Solutions <support@jublo.net>
+ * @copyright 2011-2015 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link      https://github.com/jublonet/monty
  */
@@ -58,6 +58,7 @@ abstract class Monty_Connector
     protected $query_handle;
     protected $query_string;
     protected $return_type;
+    protected $timeout;
 
     /**
      * Monty_Connector::error()
@@ -134,6 +135,14 @@ abstract class Monty_Connector
      * @param int $return_type The wanted return type
      */
     public abstract function setReturnType($return_type);
+
+    /**
+     * Monty_Connector::setTimeout()
+     * Store default timeout for database connections
+     *
+     * @param int $timeout The wanted connection timeout in seconds
+     */
+    public abstract function setTimeout($timeout);
 
     /**
      * Monty_Connector::table()

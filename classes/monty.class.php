@@ -120,6 +120,23 @@ class Monty
     }
 
     /**
+     * Monty::setTimeout
+     *
+     * @param int $timeout The connection timeout to set
+     *
+     * @return void
+     */
+    public static function setTimeout($timeout)
+    {
+        if (!isset(self::$objConnectors[MONTY_CONNECTOR_MYSQLI])) {
+            self::storeConnector();
+        }
+
+        self::$objConnectors[MONTY_CONNECTOR_MYSQLI]
+            ->setTimeout($timeout);
+    }
+
+    /**
      * Monty::table
      *
      * @param string $table_name     Database table to work with
