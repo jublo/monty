@@ -2,6 +2,9 @@ monty - changelog
 =================
 
 2.4.0 (not yet released)
++ #12 Drop support for mysql_*
++ #11 Custom port number
++ #7 Get SQL code without executing it
 
 2.3.2 (2014-06-21)
 + #4 Return old values for setter functions
