@@ -1,6 +1,12 @@
 monty - changelog
 =================
 
+2.4.0 (2015-12-03)
++ #12 Drop support for mysql_*
++ #11 Custom port number
++ #7 Get SQL code without executing it
++ #9 Set column2 = column1
+
 2.3.2 (2014-06-21)
 + #4 Return old values for setter functions
 - #10 Only respect dirty flags for selects
