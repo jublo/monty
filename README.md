@@ -100,4 +100,18 @@ if ($connector->tableExists('the_table')) {
     // do something
 }
 
+// update values
+$values = [
+    'column1' => 'Test',
+    'column2' => 12345
+];
+$table->update($values);
+
+// update a single value
+$table->update('column1', 'Test');
+
+// update by using the content of another field
+// like: SET column2 = column1
+$table->update('column2', ['column1']); // note the array syntax for value
+
 ```

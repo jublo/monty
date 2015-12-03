@@ -374,8 +374,18 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
           }
           $field_names .= ' ' . $field_name . ' =';
           if (is_null($field_array[1])) {
+            // NULL value
             $field_names .= ' NULL';
+          } elseif (is_array($field_array[1])) {
+            // SET column1 = column2
+            $field_names .= ' ';
+            foreach ($field_array[1] as $column2_part) {
+              $field_names .= '`' . $column2_part . '`.';
+            }
+            // strip off last .
+            $field_names = substr($field_names, 0, -1);
           } else {
+            // raw data
             $field_names .= ' "' . $this->DB->real_escape_string($field_array[1]) . '"';
           }
           if ($i + 1 < count($this->fields_list)) {
