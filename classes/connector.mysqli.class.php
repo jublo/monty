@@ -50,7 +50,7 @@ class Monty_MySQLI extends Monty_Connector
     if (!$this->query_handle) {
       return false;
     }
-    $rows_array = array();
+    $rows_array = [];
     while ($row_array = $this->next($type)) {
       $rows_array[] = $row_array;
     }
@@ -96,10 +96,10 @@ class Monty_MySQLI extends Monty_Connector
       case MONTY_ERROR_STRING:
         return $this->DB->error;
       case MONTY_ERROR_ARRAY:
-        return array(
+        return [
           'text' => $this->DB->error,
           'code' => $this->DB->errno
-        );
+        ];
       case MONTY_ERROR_OBJECT:
         $error_object       = new stdClass;
         $error_object->text = $this->DB->error;

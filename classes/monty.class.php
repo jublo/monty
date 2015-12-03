@@ -25,7 +25,7 @@ define('MONTY_CONNECTOR_MYSQLI', 2);
 
 class Monty
 {
-  protected static $objConnectors = array();
+  protected static $objConnectors = [];
 
   /**
    * Monty::getConnector()

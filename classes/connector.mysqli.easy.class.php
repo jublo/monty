@@ -60,7 +60,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
     if (!$table_shortcut) {
       $table_shortcut = substr($table_name, 0, 1);
     }
-    self::$comparisons  = array(
+    self::$comparisons  = [
       'eq' => '=',
       'gt' => '>',
       'gte' => '>=',
@@ -69,19 +69,19 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
       'lte' => '<=',
       'ne' => '!=',
       'regexp' => 'REGEXP'
-    );
-    self::$operators    = array(
+    ];
+    self::$operators    = [
       'and' => 'AND',
       'or' => 'OR'
-    );
-    $this->joins        = array();
-    $this->tables_list  = array(
-      array(
+    ];
+    $this->joins        = [];
+    $this->tables_list  = [
+      [
         $table_name,
         $table_shortcut
-      )
-    );
-    $this->wheres       = array();
+      ]
+    ];
+    $this->wheres       = [];
     $this->is_dirty     = true;
     $this->insert_type  = null;
     $this->limit_count  = null;
@@ -213,10 +213,10 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
   public function add($table_name, $table_shortcut = null)
   {
     $this->is_dirty      = true;
-    $this->tables_list[] = array(
+    $this->tables_list[] = [
       $table_name,
       $table_shortcut
-    );
+    ];
   }
 
   /**
@@ -362,10 +362,10 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
         $field_names = ' SET';
         $i           = 0;
         foreach ($this->fields_list as $field_name => $value) {
-          $field_array = array(
+          $field_array = [
             $field_name,
             $value
-          );
+          ];
           if (stristr($field_array[0], '.')) {
             $field_name_array = explode('.', $field_array[0], 2);
             $field_name       = '`' . $field_name_array[1] . '`';
@@ -526,7 +526,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
    *
    * @return void
    */
-  public function fields($fields_list = array())
+  public function fields($fields_list = [])
   {
     $this->is_dirty = true;
     if (is_array($fields_list)) {
@@ -550,13 +550,13 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
   public function join($table_name, $table_shortcut, $join_type, $on_field_left, $on_field_right)
   {
     $this->is_dirty = true;
-    $this->joins[]  = array(
+    $this->joins[]  = [
       $table_name,
       $table_shortcut,
       $join_type,
       $on_field_left,
       $on_field_right
-    );
+    ];
   }
 
   /**
@@ -647,12 +647,12 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
   public function rand()
   {
     $this->is_dirty = true;
-    $this->sorts    = array(
-      array(
+    $this->sorts    = [
+      [
         null,
         1
-      )
-    );
+      ]
+    ];
   }
 
   /**
@@ -736,10 +736,10 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
   public function sort($by, $is_asc = 1)
   {
     $this->is_dirty = true;
-    $this->sorts[]  = array(
+    $this->sorts[]  = [
       $by,
       $is_asc
-    );
+    ];
   }
 
   /**
@@ -797,9 +797,9 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
   public function update($fields_list, $value = null)
   {
     if ($value !== null) {
-      $fields_list = array(
+      $fields_list = [
         $fields_list => $value
-      );
+      ];
     }
     $this->fields_list = $fields_list;
     $this->is_dirty    = true;
