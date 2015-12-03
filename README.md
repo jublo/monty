@@ -41,14 +41,14 @@ $connector->open('youruser', 'fancypass', 'holydatabase');
 
 // need a custom port number? add a 5th parameter like this:
 // $db->open(
-//     'youruser', 'fancypass', 'holydatabase',
-//     'pentagon.example.com', 3307
+//   'youruser', 'fancypass', 'holydatabase',
+//   'pentagon.example.com', 3307
 // );
 
 // want a persistent connection? add a 6th parameter like this:
 // $db->open(
-//     'youruser', 'fancypass', 'holydatabase',
-//     'pentagon.example.com', 3307, MONTY_OPEN_PERSISTENT
+//   'youruser', 'fancypass', 'holydatabase',
+//   'pentagon.example.com', 3307, MONTY_OPEN_PERSISTENT
 // );
 
 // now there's two operation modes:
@@ -68,8 +68,10 @@ $table->where('field', '=', 'value');
 // $table->select(MONTY_SELECT_DISTINCT);
 
 // you might also want to use ands/ors
-// $table->or($table->eq('field1', 'value1'),
-//               $table->like('field2', 'value2'));
+// $table->or(
+//   $table->eq('field1', 'value1'),
+//   $table->like('field2', 'value2')
+// );
 // equals:
 // ... WHERE field1 = "value1" OR field2 LIKE "value2"
 
@@ -78,8 +80,8 @@ echo $table->sql() . '<br />';
 
 // loop through the results and display them
 for($i = 0; $i < $table->rows(); $i++) {
-    $row_array = $table->next();
-    echo $row_array['field'] . ' = ' . $row_array['value'] . '<br />';
+  $row_array = $table->next();
+  echo $row_array['field'] . ' = ' . $row_array['value'] . '<br />';
 }
 
 // you could also have got an object instead, like this:
@@ -97,13 +99,13 @@ echo $connector->rows();
 
 // check if a certain table exists at the moment:
 if ($connector->tableExists('the_table')) {
-    // do something
+  // do something
 }
 
 // update values
 $values = [
-    'column1' => 'Test',
-    'column2' => 12345
+  'column1' => 'Test',
+  'column2' => 12345
 ];
 $table->update($values);
 
