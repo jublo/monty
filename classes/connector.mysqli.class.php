@@ -51,7 +51,7 @@ class Monty_MySQLI extends Monty_Connector
       return false;
     }
     $rows_array = [];
-    while ($row_array = $this->next($type)) {
+    while ($row_array = $this->_next_shadow($type)) {
       $rows_array[] = $row_array;
     }
 
@@ -59,13 +59,13 @@ class Monty_MySQLI extends Monty_Connector
   }
 
   /**
-   * Monty_MySQLI::next()
+   * Monty_MySQLI::_next_shadow()
    *
    * @param int $type The return type
    *
    * @return mixed $mixRow
    */
-  public function next($type = null)
+  private function _next_shadow($type = null)
   {
     if (!$this->query_handle) {
       return false;
@@ -81,6 +81,18 @@ class Monty_MySQLI extends Monty_Connector
     }
 
     return $this->query_handle->fetch_assoc();
+  }
+
+  /**
+   * Monty_MySQLI::next()
+   *
+   * @param int $type The return type
+   *
+   * @return mixed $mixRow
+   */
+  public function next($type = null)
+  {
+    return $this->_next_shadow($type);
   }
 
   /**
