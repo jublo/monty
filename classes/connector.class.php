@@ -5,7 +5,7 @@
  *
  * @package   Monty
  * @author    Jublo Solutions <support@jublo.net>
- * @copyright 2011-2015 Jublo Solutions <support@jublo.net>
+ * @copyright 2011-2017 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link      https://github.com/jublonet/monty
  */
@@ -47,7 +47,7 @@ define('MONTY_SELECT_DISTINCT', 2);
  * @category  Database
  * @package   Monty
  * @author    Jublo Solutions <support@jublo.net>
- * @copyright 2011-2015 Jublo Solutions <support@jublo.net>
+ * @copyright 2011-2017 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0
  * @link      https://github.com/jublonet/monty
  */

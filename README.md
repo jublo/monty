@@ -2,7 +2,7 @@ monty
 =====
 *A simple MySQL/MariaDB database wrapper in PHP.*
 
-Copyright (C) 2011-2015 Jublo Solutions <support@jublo.net>
+Copyright (C) 2011-2017 Jublo Solutions <support@jublo.net>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published
