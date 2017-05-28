@@ -1,6 +1,9 @@
 monty - changelog
 =================
 
+2.4.1 (2017-05-28)
++ Fix calling of $op->all() resulting in an infinite loop
+
 2.4.0 (2015-12-03)
 + #12 Drop support for mysql_*
 + #11 Custom port number
