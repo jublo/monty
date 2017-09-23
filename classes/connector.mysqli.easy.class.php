@@ -266,7 +266,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
         if ($this->select_type === MONTY_SELECT_DISTINCT) {
           $query_string .= 'DISTINCT ';
         }
-        if (count($this->fields_list)) {
+        if (is_array($this->fields_list) && count($this->fields_list)) {
           $query_string .= $this->buildQueryFields($type);
         } else {
           $query_string .= '*';
@@ -407,7 +407,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
   protected function buildQueryJoins()
   {
     $joins = '';
-    if (count($this->joins)) {
+    if (is_array($this->joins) && count($this->joins)) {
       foreach ($this->joins as $join) {
         $join_type = $join[2];
         switch ($join_type) {
@@ -441,7 +441,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
   protected function buildQueryWheres()
   {
     $where_clauses = '';
-    if (count($this->wheres)) {
+    if (is_array($this->wheres) && count($this->wheres)) {
       $hash = $this->mergeWheres('AND', array_keys($this->wheres));
       $where_clauses .= ' WHERE';
       $where_clauses .= $this->wheres[$hash];
@@ -458,7 +458,7 @@ class Monty_MySQLI_Easy extends Monty_MySQLI
   protected function buildQuerySorts()
   {
     $sorts = '';
-    if (count($this->sorts)) {
+    if (is_array($this->sorts) && count($this->sorts)) {
       $sorts .= ' ORDER BY';
       for ($i = 0; $i < count($this->sorts); $i++) {
         $sort = $this->sorts[$i];
