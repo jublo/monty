@@ -4,7 +4,7 @@
  * A simple MySQL/MariaDB database wrapper in PHP.
  *
  * @package   Monty
- * @version   2.4.1
+ * @version   2.4.2
  * @author    Jublo Solutions <support@jublo.net>
  * @copyright 2011-2017 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/LGPL-3.0 GNU Lesser Public License 3.0

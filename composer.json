@@ -1,7 +1,7 @@
 {
   "name": "jublonet/monty",
   "description": "A simple MySQL/MariaDB database wrapper in PHP.",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "autoload": {
     "classmap": ["loader.php"]
   },
